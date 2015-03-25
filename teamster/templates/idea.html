@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>{{ ctx.idea.title }}</h1>
+<h2>{{ ctx.idea.pitcher.name }}</h2>
+<p>{{ ctx.idea.description }}</p>
+{{ ctx.skills | join(', ') }}
+
+<br />
+<br />
+
+<button>Join!</button>
+
+{% endblock body %}

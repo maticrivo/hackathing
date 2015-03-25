@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>Ideas</h1>
+
+<ul>
+{% for data in ctx %}
+    <li>
+        <h2><a href="/ideas/{{ data.idea.id }}">{{ data.idea.title }}</a></h2>
+        <h3>{{ data.idea.pitcher.name }}</h3>
+        <p>{{ data.idea.description }}</p>
+        {{ data.skills | join(', ') }}
+
+    </li>
+{% endfor %}
+</ul>
+
+{% endblock body %}

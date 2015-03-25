@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1>{{ ctx.name }}</h1>
+
+<h2>Your skills:</h2>
+<ul>
+{% for skill in ctx.skills %}
+    <li>{{ skill }}</li>
+{% endfor %}
+</ul>
+
+<h2>Ideas:</h2>
+<ul>
+{% for idea in ctx.pitches %}
+    <li>{{ idea.title }} (yours)</li>
+{% endfor %}
+{% for idea in ctx.joined %}
+    <li>{{ idea }}</li>
+{% endfor %}
+</ul>
+
+{% endblock body %}
