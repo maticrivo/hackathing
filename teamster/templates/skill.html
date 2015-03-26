@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block body %}
+
+<h1 class="label label-default">{{ ctx.skill.title }}</h1>
+
+<h3>Ideas:</h3>
+<ul>
+{% for idea in ctx.ideas %}
+  <li><a href="/ideas/{{ idea.id }}">{{ idea.title }}</a></li>
+{% endfor %}
+</ul>
+
+<h3>Skilled:</h3>
+<ul>
+{% for user in ctx.skilled %}
+  <li><a href="/user/{{ user.user }}">{{ user.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% endblock body %}

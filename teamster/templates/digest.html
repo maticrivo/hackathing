@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+
+<div class="alert alert-dismissible alert-success">
+  <button type="button" class="close" data-dismiss="alert">×</button>
+  <strong>Messages sent succussfully!</strong>
+</div>
+{% for item in ctx %}
+{{ item[0] }}
+<div class="well well-sm">{{ item[1] }}</div>
+{% endfor %}
+
+{% endblock body %}

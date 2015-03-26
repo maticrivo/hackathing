@@ -1,0 +1,22 @@
+body{
+    font-size: 18px;
+}
+.jumbotron {
+    position: relative;
+}
+.jumbotron p {
+font-size: 18px;
+    height: 80px;
+    overflow: hidden;
+}
+.jumbotron .btn {
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+}
+.label-default {
+    background-color: rgb(0, 186, 158)
+}
+h1.label {
+    font-size: inherit;
+}

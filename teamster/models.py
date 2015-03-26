@@ -11,7 +11,6 @@ class Persons(DatabaseModel):
     id = peewee.IntegerField(primary_key=True)
     name = peewee.CharField(unique=True, null=False)
     user = peewee.CharField(unique=True, null=False)
-    hipchat_handle = peewee.CharField(unique=True, null=False)
 
     @classmethod
     def by_user(cls, user):
@@ -20,11 +19,38 @@ class Persons(DatabaseModel):
         except peewee.DoesNotExist:
             return None
 
+    @classmethod
+    def non_active(cls):
+        return cls.select().where(~cls.id << Ideas.select(Ideas.pitcher))
+
+    @classmethod
+    def pitched_over_one(cls):
+        return cls.select(cls.id, cls.user, peewee.fn.Count(1).alias('count'))\
+                   .join(Ideas)\
+                   .group_by(cls)\
+                   .having(peewee.fn.Count(1) > 1)
+
+    @classmethod
+    def teamed_over_one(cls):
+        return cls.select(cls.id, cls.user, peewee.fn.Count(1).alias('count'))\
+               .join(TeamUps)\
+               .group_by(cls)\
+               .having(peewee.fn.Count(1) > 1)
+
+    @classmethod
+    def by_skill(cls, skill_id):
+        return cls.select(cls, PersonsSkills)\
+                  .join(PersonsSkills, on=(cls.id == PersonsSkills.person))\
+                  .where(PersonsSkills.skill == skill_id)
+
 
 class Skills(DatabaseModel):
     id = peewee.IntegerField(primary_key=True)
     title = peewee.CharField(unique=True, null=False)
 
+    @classmethod
+    def by_id(cls, id):
+        return cls.get(cls.id == id)
 
 class PersonsSkills(DatabaseModel):
     person = peewee.ForeignKeyField(Persons)
@@ -56,11 +82,27 @@ class Ideas(DatabaseModel):
 
     @classmethod
     def by_person(cls, person):
-        return cls.select(cls.title, cls.description).where(cls.pitcher == person.id)
+        return cls.select(cls.id, cls.title, cls.description).where(cls.pitcher == person.id)
 
     @classmethod
     def by_id(cls, id):
         return cls.get(cls.id== id)
+
+    @classmethod
+    def suggest_by_person(cls, person):
+        # ideas person already joined
+        already_joined = TeamUps.select(TeamUps.idea).where(TeamUps.person == person.id)
+        # ideas that require skills that match at least one of person's skills
+        match_skills = cls.select(cls.id)\
+                       .join(IdeasSkills, on=(cls.id == IdeasSkills.idea))\
+                       .join(PersonsSkills, on=(IdeasSkills.skill == PersonsSkills.skill))\
+                       .where(PersonsSkills.person == person.id)
+        # add them up
+        return cls.select(cls.id, cls.title).where(~cls.id << already_joined).where(cls.id << match_skills)
+
+    @classmethod
+    def get_by_skill(cls, skill_id):
+        return cls.select(cls.id, cls.title, IdeasSkills.idea).join(IdeasSkills).where(IdeasSkills.skill == skill_id)
 
 
 class TeamUps(DatabaseModel):
@@ -73,10 +115,16 @@ class TeamUps(DatabaseModel):
 
     @classmethod
     def by_person(cls, person):
-        return cls.select(cls.person, Ideas.title)\
+        return cls.select(cls.idea, cls.person, Ideas.title)\
                   .join(Ideas, on=(cls.idea == Ideas.id))\
                   .where(cls.person == person.id)\
                   .select()
+
+    @classmethod
+    def by_idea(cls, id):
+        return cls.select(cls.idea, Persons.name, Persons.id, Persons.user)\
+                  .join(Persons, on=(Persons.id == cls.person))\
+                  .where(cls.idea == id)
 
 
 class IdeasSkills(DatabaseModel):

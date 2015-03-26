@@ -2,13 +2,20 @@
 {% block body %}
 
 <h1>{{ ctx.idea.title }}</h1>
-<h2>{{ ctx.idea.pitcher.name }}</h2>
+<h3><a href="/user/{{ ctx.idea.pitcher.user }}">{{ ctx.idea.pitcher.name }}</a></h3>
 <p>{{ ctx.idea.description }}</p>
-{{ ctx.skills | join(', ') }}
+{% for skill in ctx.skills %}
+  <a href="/skills/{{ skill.id }}" class="label label-default">{{ skill.title }}</a>
+{% endfor %}
 
-<br />
-<br />
 
-<button>Join!</button>
+<h3>Joined</h3>
+<ul>
+  {% for obj in ctx.joined %}
+  <li><a href="/user/{{ obj.person.user }}">{{ obj.person.name }}</a></li>
+  {% endfor %}
+</ul>
+
+<button class="btn btn-primary">Join!</button>
 
 {% endblock body %}

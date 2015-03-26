@@ -3,21 +3,33 @@
 
 <h1>{{ ctx.name }}</h1>
 
-<h2>Your skills:</h2>
-<ul>
+<h3>Skills:</h3>
 {% for skill in ctx.skills %}
-    <li>{{ skill }}</li>
+<a href="/skills/{{ skill.id }}" class="label label-default">{{ skill.title }}</a>
+{% endfor %}
+
+<h3>Pitches:</h3>
+<ul>
+{% for idea in ctx.pitched %}
+    <li><a href="/ideas/{{ idea.id }}">{{ idea.title }}</a></li>
 {% endfor %}
 </ul>
 
-<h2>Ideas:</h2>
+<h3>Joined:</h3>
 <ul>
-{% for idea in ctx.pitches %}
-    <li>{{ idea.title }} (yours)</li>
-{% endfor %}
 {% for idea in ctx.joined %}
-    <li>{{ idea }}</li>
+    <li><a href="/ideas/{{ idea.id }}">{{ idea.title }}</a></li>
 {% endfor %}
 </ul>
+
+<h3>Can join:</h3>
+{% for idea in ctx.suggested %}
+    <li>
+      <a href="/ideas/{{ idea.id }}">{{ idea.title }}</a>
+
+    </li>
+{% endfor %}
+
+
 
 {% endblock body %}
