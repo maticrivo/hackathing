@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% block body %}
+
+{{ m.breadcrumbs([('Hackers', '/hackers'), ctx.name]) }}
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <div class="col-md-2">
+      <img class="circle" src="http://gravatar.com/avatar/{{ ctx.email | md5 }}?s=116" />
+    </div>
+    <div class="col-md-10">
+      <h1>{{ ctx.name }}</h1>
+
+      <h5>Skills</h5>
+      {% for data in ctx.skills %}
+        {{ m.skill(data.id, data.title) }}
+      {% endfor %}
+      {{ m.icon_button('mdi-content-add', modal='add_skill') }}
+
+      <h5>Pitched</h5>
+      {% for data in ctx.pitched %}
+        {{ m.project(data.id, data.title, 'pitched') }}
+      {% endfor %}
+      {{ m.icon_button('mdi-content-add', url='/pitch') }}
+
+      <h5>Joined</h5>
+      {% for data in ctx.joined %}
+        {{ m.project(data.id, data.title, 'joined') }}
+      {% endfor %}
+
+      <h5>Needed for</h5>
+      {% for data in ctx.suggested %}
+        {{ m.project(data.id, data.title, 'suggested') }}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% call m.modal('Add a skill', 'add_skill', 'hello') %}
+  {% for i in [1, 2, 3] %}
+  <div class="togglebutton">
+      <label>
+          <input type="checkbox" checked=""> Skill {{ i }}
+      </label>
+  </div>
+  {% endfor %}
+{% endcall %}
+{% endblock body %}

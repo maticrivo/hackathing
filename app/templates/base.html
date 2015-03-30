@@ -1,16 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-      <meta charset="UTF-8">
-      <title>Teamster</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-      <link rel="stylesheet" href="/static/bootswatch-cosmo.min.css" media="screen">
-      <link rel="stylesheet" href="/static/style.css">
-    </head>
-    <body>
+  <head>
+    <meta charset="UTF-8">
+    <title>Teamster</title>
+    <link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/components/bootstrap-material-design/dist/css/material.min.css">
+    <link rel="stylesheet" href="/static/components/bootstrap-material-design/dist/css/ripples.min.css">
+    <link rel="stylesheet" href="/static/components/bootstrap-material-design/dist/css/roboto.min.css">
+    <link rel="stylesheet" href="/static/style.css">
+
+    <script src="/static/components/jquery/dist/jquery.min.js"></script>
+    <script src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/static/components/bootstrap-material-design/dist/js/ripples.min.js"></script>
+    <script src="/static/components/bootstrap-material-design/dist/js/material.min.js"></script>
+
+  </head>
+  <body>
+    <div class="navbar">
       <div class="container">
-        {% block body %}
-        {% endblock %}
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">HackAthing</a>
+        </div>
+        <div class="navbar-collapse collapse navbar-responsive-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="javascript:void(0)">Login</a></li>
+            </ul>
+        </div>
       </div>
-    </body>
+    </div>
+    <div class="navbar">
+      <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+          </button>
+      </div>
+      <div class="navbar-collapse collapse navbar-responsive-collapse">
+        <div class="container">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+                  <a href="javascript:void()" data-target="#" class="dropdown-toggle" data-toggle="dropdown">
+                    HackAthing <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li><a href="javascript:void(0)">HackAthing #6 (March '15)</a></li>
+                      <li><a href="javascript:void(0)">HackAthing #5 (Nov '14)</a></li>
+                      <li><a href="javascript:void(0)">HackAthing #4 (March '15)</a></li>
+                      <li><a href="javascript:void(0)">HackAthing #3 (March '15)</a></li>
+                      <li><a href="javascript:void(0)">HackAthing #2 (March '15)</a></li>
+                      <li><a href="javascript:void(0)">HackAthing #1 (March '15)</a></li>
+                  </ul>
+              </li>
+              <li><a href="/projects">Projects</a></li>
+              <li><a href="/hackers">Hackers</a></li>
+          </ul>
+        </div>
+      </div>
+  </div>
+    <div class="container">
+      {% block body %}
+      {% endblock %}
+    </div>
+
+    <script>
+      $('[data-toggle="tooltip"]').tooltip();
+    </script>
+  </body>
+
 </html>

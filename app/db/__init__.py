@@ -1,5 +1,5 @@
 import peewee
-from teamster import settings
+from app import settings
 
 
 class Database(object):

@@ -1,0 +1,63 @@
+{% macro skill(id, title) -%}
+    <a href="/skills/{{ id }}" class="btn btn-primary">{{ title }}</a>
+{%- endmacro %}
+
+{% macro project(id, title, type) -%}
+  {% if type != 'suggested' %}
+  <a href="/projects/{{ id }}" class="btn btn-info shadow-z-1">{{ title }}</a>
+  {% else %}
+  <a href="/projects/{{ id }}" class="btn shadow-z-1">{{ title }}</a>
+  {% endif %}
+{%- endmacro %}
+
+{% macro hacker(username, name) -%}
+    <a href="/hackers/{{ username }}" class="btn btn-info">{{ username }}</a>
+{%- endmacro %}
+
+{% macro breadcrumbs(args) -%}
+  <ul class="breadcrumb">
+    {% for crumb in args %}
+    <li>
+      {% if crumb is string %}
+      {{ crumb }}
+      {% else %}
+      <a href="{{ crumb[1] }}">{{ crumb[0] }}</a>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+{%- endmacro %}
+
+{% macro icon_button(icon, type='default') -%}
+  <a class="btn btn-{{ type }} {{ icon }}
+    {% if type == 'action' %}
+    btn-fab btn-raised btn-material-red
+    {% else %}
+    circle
+    {% endif %}
+  "
+     {% if 'modal' in kwargs %}
+      data-toggle="modal" data-target="#{{ kwargs['modal'] }}"
+     {% elif 'url' in kwargs %}
+      href="{{ kwargs['url'] }}"
+     {% endif %}
+  ></a>
+{%- endmacro %}
+
+{% macro modal(title, modal_id, url) -%}
+<div class="modal fade" id="{{ modal_id }}" role="dialog">
+  <div class="modal-dialog">
+    <form class="modal-content inline-form" method="POST" action="{{ url }}">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">{{ title }}</h4>
+        </div>
+        <div class="modal-body">{{ caller() }}</div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+     </form>
+  </div>
+</div>
+ {%- endmacro %}

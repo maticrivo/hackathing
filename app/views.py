@@ -1,4 +1,4 @@
-from teamster import app, settings, email, send_hipchat_msg
+from app import app, settings, email, send_hipchat_msg
 from models import *
 from flask import render_template
 
@@ -6,9 +6,9 @@ from flask import render_template
 def hello_world():
     return 'Hello World!'
 
-@app.route('/user/<user>')
-def user(user):
-    person = Persons.by_user(user)
+@app.route('/hackers/<hacker>')
+def hacker(hacker):
+    person = Persons.by_user(hacker)
     skills = PersonsSkills.by_person(person)
     pitched = Ideas.by_person(person)
     joined = [x.idea for x in TeamUps.by_person(person)]
@@ -16,42 +16,43 @@ def user(user):
 
     ctx = {
         'name': person.name,
+        'email': person.user+'@everything.me',
         'skills': [s.skill for s in skills],
         'pitched': pitched,
         'joined': joined,
         'suggested': suggested
     }
 
-    return render_template('user.html', ctx=ctx)
+    return render_template('hacker.html', ctx=ctx)
 
 @app.route('/')
-@app.route('/ideas')
-def ideas():
+@app.route('/projects')
+def projects():
     ctx = []
-    ideas =  Ideas.get_all()
-    for idea in ideas:
-        skills = IdeasSkills.get_by_idea(idea)
+    projects =  Ideas.get_all()
+    for project in projects:
+        skills = IdeasSkills.get_by_idea(project)
         ctx.append({
-            'idea': idea,
+            'idea': project,
             'skills': [s.skill for s in skills]
         })
 
-    return render_template('ideas.html', ctx=ctx)
+    return render_template('projects.html', ctx=ctx)
 
 
-@app.route('/ideas/<int:id>')
-def idea(id):
-    idea =  Ideas.by_id(id)
-    skills = IdeasSkills.get_by_idea(idea)
+@app.route('/projects/<int:id>')
+def project(id):
+    project =  Ideas.by_id(id)
+    skills = IdeasSkills.get_by_idea(project)
     joined = TeamUps.by_idea(id)
 
     ctx = {
-        'idea': idea,
+        'idea': project,
         'skills': [s.skill for s in skills],
         'joined': joined
     }
 
-    return render_template('idea.html', ctx=ctx)
+    return render_template('project.html', ctx=ctx)
 
 @app.route('/skills/<id>')
 def skill(id):
@@ -62,6 +63,10 @@ def skill(id):
     }
 
     return render_template('skill.html', ctx=ctx)
+
+@app.route('/projects/<project_id>/join')
+def join(project_id):
+    pass
 
 @app.route('/api/digest')
 def digest():

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% block body %}
+
+{{ m.breadcrumbs([('Projects', url_for('projects')), ctx.idea.title]) }}
+
+<div id="project" class="panel panel-info">
+  <div class="panel-heading">
+    <h1>{{ ctx.idea.title }}</h1>
+    <p>
+      {{ ctx.idea.description }}
+      <br /><br />
+      Pitched by <a href="{{ url_for('hacker', hacker=ctx.idea.pitcher.user) }}">{{ ctx.idea.pitcher.name }}</a>
+    </p>
+  </div>
+  <div class="panel-body">
+    <h5>Already joined</h5>
+    {% for data in ctx.joined %}
+    {{ m.hacker(data.person.user, data.person.name) }}
+    {% endfor %}
+
+    <h5>Required skills</h5>
+    {% for data in ctx.skills %}
+      {{ m.skill(data.id, data.title) }}
+    {% endfor %}
+  </div>
+  {{ m.icon_button('mdi-social-person-add', url=url_for('join', project_id=ctx.idea.id), type='action') }}
+</div>
+
+
+{% include 'disqus.html' %}
+
+{% endblock body %}

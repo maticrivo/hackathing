@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% block body %}
+
+{{ m.breadcrumbs(['Projects']) }}
+
+<div class="form-group">
+    <label class="col-lg-1 control-label">Filter</label>
+    <div class="col-lg-1">
+        <select class="form-control">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+        </select>
+    </div>
+</div>
+
+<button class="sort" data-sort="random">Random</button>
+
+<div id="projects">
+  {% set colors = ['#ec407a', '#ab47bc', '#26c6da', '#ffca28', '#29b6f6', '#e84e40', '#5c6bc0', '#ff7043', '#9ccc65'] %}
+  {% set icons = ['mdi-action-face-unlock', 'mdi-action-find-in-page', 'mdi-action-polymer', 'mdi-action-settings-remote', 'mdi-action-view-quilt', 'mdi-communication-ring-volume'] %}
+  {% for data in ctx %}
+    {% set color = colors[loop.index%colors|length] %}
+    {% set icon = icons[loop.index%icons|length] %}
+    <div class="project flip-container mix hackathing-{{ data.idea.hackathing_id }}" data-myorder="{{ loop.index }}">
+      <div class="flipper">
+        <div class="panel front" style="background-color: {{ color }}">
+          <div class="panel-body">
+            <icon class="{{ icon }}"></icon>
+            <title>{{ data.idea.title }}</title>
+          </div>
+        </div>
+        <div class="panel back">
+          <div class="panel-body">
+            <h3>{{ data.idea.title }}</h3>
+            <p>{{ data.idea.description }}</p>
+            <pitcher>Pitched by {{ data.idea.pitcher.user }}</pitcher>
+            <a href="/projects/{{ data.idea.id }}" class="btn btn-primary btn-xs">more info</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script src="/static/components/mixitup/build/jquery.mixitup.min.js"></script>
+<script>
+  $('#projects').mixItUp({
+	animation: {
+		duration: 400,
+		effects: 'fade translateZ(-360px) stagger(34ms)',
+		easing: 'ease'
+	}
+});
+</script>
+
+{% endblock body %}
