@@ -2,10 +2,6 @@ from app import app, settings, email, send_hipchat_msg
 from models import *
 from flask import render_template
 
-@app.route('/ranbena')
-def hello_world():
-    return 'Hello World!'
-
 @app.route('/hackers/<hacker>')
 def hacker(hacker):
     person = Persons.by_user(hacker)
@@ -28,13 +24,14 @@ def hacker(hacker):
 @app.route('/')
 @app.route('/projects')
 def projects():
-    ctx = []
-    projects =  Ideas.get_all()
-    for project in projects:
-        skills = IdeasSkills.get_by_idea(project)
-        ctx.append({
-            'idea': project,
-            'skills': [s.skill for s in skills]
+    ctx = {
+        'skills': Skills.get_all(),
+        'projects': []
+    }
+    for project in Ideas.get_all():
+        ctx['projects'].append({
+            'project': project,
+            'skills': [s.skill for s in IdeasSkills.get_by_idea(project)]
         })
 
     return render_template('projects.html', ctx=ctx)

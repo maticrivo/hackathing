@@ -52,6 +52,10 @@ class Skills(DatabaseModel):
     def by_id(cls, id):
         return cls.get(cls.id == id)
 
+    @classmethod
+    def get_all(cls):
+        return cls.select()
+
 class PersonsSkills(DatabaseModel):
     person = peewee.ForeignKeyField(Persons)
     skill = peewee.ForeignKeyField(Skills)
