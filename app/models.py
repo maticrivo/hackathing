@@ -54,7 +54,11 @@ class Skills(DatabaseModel):
 
     @classmethod
     def get_all(cls):
-        return cls.select()
+        return cls.select(cls.id, cls.title, peewee.fn.Count(1).alias('count'))\
+                           .join(Ideas)\
+                           .group_by(cls)\
+                           .having(peewee.fn.Count(1) > 1)
+
 
 class PersonsSkills(DatabaseModel):
     person = peewee.ForeignKeyField(Persons)
