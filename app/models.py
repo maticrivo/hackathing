@@ -55,7 +55,7 @@ class Skills(DatabaseModel):
     @classmethod
     def get_all(cls):
         return cls.select(cls.id, cls.title, peewee.fn.Count(1).alias('count'))\
-                           .join(Ideas)\
+                           .join(Ideas, on=(cls.id == Ideas.id))\
                            .group_by(cls)\
                            .having(peewee.fn.Count(1) > 1)
 

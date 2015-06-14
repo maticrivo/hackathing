@@ -10,7 +10,7 @@ def load_settings(prefix, defaults):
 
 DATABASE = load_settings('DATABASE', {
     'class': 'MySQLDatabase',
-    'name': 'Teamster',
+    'name': 'hackathing',
     'host': '',
     'user': 'root',
     'password': ''
