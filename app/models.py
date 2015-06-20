@@ -94,27 +94,35 @@ class Projects(DatabaseModel):
 
     @classmethod
     def by_hacker(cls, hacker):
-        return cls.select(cls.id, cls.title, cls.description).where(cls.hacker == hacker.id)
+        return cls.select(cls.id, cls.title, cls.description)\
+                .where(cls.hacker == hacker.id)\
+                .where(cls.hackathing_id == CURRENT_HACKATHING)
 
     @classmethod
     def by_id(cls, id):
-        return cls.get(cls.id== id)
+        return cls.get(cls.id == id)
 
     @classmethod
     def suggest_by_hacker(cls, hacker):
         # projects hacker already joined
         already_joined = TeamUps.select(TeamUps.project).where(TeamUps.hacker == hacker.id)
+
         # projects that require skills that match at least one of hacker's skills
         match_skills = cls.select(cls.id)\
                        .join(ProjectsSkills, on=(cls.id == ProjectsSkills.project))\
                        .join(HackersSkills, on=(ProjectsSkills.skill == HackersSkills.skill))\
                        .where(HackersSkills.hacker == hacker.id)
         # add them up
-        return cls.select(cls.id, cls.title).where(~cls.id << already_joined).where(cls.id << match_skills)
+        return cls.select(cls.id, cls.title)\
+                    .where(cls.hackathing_id == CURRENT_HACKATHING)\
+                    .where(~cls.id << already_joined)\
+                    .where(cls.id << match_skills)
 
     @classmethod
     def get_by_skill(cls, skill_id):
-        return cls.select(cls.id, cls.title, ProjectsSkills.project).join(ProjectsSkills).where(ProjectsSkills.skill == skill_id)
+        return cls.select(cls.id, cls.title, ProjectsSkills.project)\
+                    .join(ProjectsSkills)\
+                    .where(ProjectsSkills.skill == skill_id)
 
 
 class TeamUps(DatabaseModel):
@@ -130,7 +138,7 @@ class TeamUps(DatabaseModel):
         return cls.select(cls.project, cls.hacker, Projects.title)\
                   .join(Projects, on=(cls.project == Projects.id))\
                   .where(cls.hacker == hacker.id)\
-                  .select()
+                  .where(Projects.hackathing_id == CURRENT_HACKATHING)
 
     @classmethod
     def by_project(cls, id):
