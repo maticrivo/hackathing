@@ -29,7 +29,7 @@
         {{ m.project(data.id, data.title, 'joined') }}
       {% endfor %}
 
-      <h5>Needed for</h5>
+      <h5>Can join</h5>
       {% for data in ctx.suggested %}
         {{ m.project(data.id, data.title, 'suggested') }}
       {% endfor %}

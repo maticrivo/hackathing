@@ -20,6 +20,8 @@ HIPCHAT = load_settings('HIPCHAT', {
     'token': ''
 })
 
+CURRENT_HACKATHING = 7
+
 SCHEDULE = {
     'announce': datetime.datetime(2015, 3, 25, 14, 00),
     'freeze': datetime.datetime(2015, 4, 18, 9, 00),
@@ -35,23 +37,23 @@ DIGEST_SCHEDULE = {
 
 MESSAGES = {
     'announce': 'HackAthing #{hackathing_num} is on!\nStop whatever it is you\'re doing '
-                'and log in NOW: http://teamster.p.doit9.com/login',
+                'and log in NOW: http://hackathing.p.doit9.com/login',
     'not_registered': 'Hey Jon Doe, nice to meet you, Jon Doe. Oh, you\'re not Jon Doe? '
-                      'Well, I just saw you did not have a name in this HackAthing.. http://teamster.p.doit9.com/login',
+                      'Well, I just saw you did not have a name in this HackAthing.. http://hackathing.p.doit9.com/login',
     'no_pitch': 'Hi, me again. Remember that cool idea you thought of a while ago? '
                 'The one with that stuff that could really improve the thing? Plz rite it heer: '
-                'http://teamster.p.doit9.com/pitch WUV U <3 :* )',
+                'http://hackathing.p.doit9.com/pitch WUV U <3 :* )',
     'no_team_0_sugg': 'Ummm.. you didn\'t join a team yet for the HackAthing :/ Pick one here: '
-               'http://teamster.p.doit9.com/projects OR pitch an idea of your own http://teamster.p.doit9.com/pitch',
+               'http://hackathing.p.doit9.com/projects OR pitch an idea of your own http://hackathing.p.doit9.com/pitch',
     'no_team_1_sugg': 'The bat signal is up! There\'s 1 idea that needs your e-x-a-c-t skillset! Click here: '
-               'http://teamster.p.doit9.com/projects/{id}',
+               'http://hackathing.p.doit9.com/projects/{id}',
     'no_team_much_sugg': 'The bat signal is up! There are {count} ideas that need your exact skillset! Full list here: '
-               'http://teamster.p.doit9.com/hacker/{hacker}',
+               'http://hackathing.p.doit9.com/hacker/{hacker}',
     'pitch_much': 'OMG, just wanted to say I LOVED your ideas. Loved \'em. LOVEM! But {count} is a bit much, '
-                  'get your act together and pick one: http://teamster.p.doit9.com/hacker/{hacker}',
+                  'get your act together and pick one: http://hackathing.p.doit9.com/hacker/{hacker}',
     'team_much': 'Hey, it\'s not that I don\'t believe that you can\'t deliver {count} different ideas.. '
-                 'Wait. That\'s exactly it. Narrow it down, dear: http://teamster.p.doit9.com/hacker/{hacker}',
-    'freeze': 'Honey, the ideas are getting frozen. Last chance to change \'em: http://teamster.p.doit9.com/hacker/{hacker}',
-    'new_team_member': 'Guess wat! {name} just joined in on {project.name}! http://teamster.p.doit9.com/hacker/{hacker}'
+                 'Wait. That\'s exactly it. Narrow it down, dear: http://hackathing.p.doit9.com/hacker/{hacker}',
+    'freeze': 'Honey, the ideas are getting frozen. Last chance to change \'em: http://hackathing.p.doit9.com/hacker/{hacker}',
+    'new_team_member': 'Guess wat! {name} just joined in on {project.name}! http://hackathing.p.doit9.com/hacker/{hacker}'
 
 }

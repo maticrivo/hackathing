@@ -2,24 +2,6 @@ from app import app, settings, email, send_hipchat_msg
 from models import *
 from flask import render_template
 
-@app.route('/hackers/<hacker>')
-def hacker(hacker):
-    person = Persons.by_user(hacker)
-    skills = PersonsSkills.by_person(person)
-    pitched = Ideas.by_person(person)
-    joined = [x.idea for x in TeamUps.by_person(person)]
-    suggested = Ideas.suggest_by_person(person)
-
-    ctx = {
-        'name': person.name,
-        'email': person.user+'@everything.me',
-        'skills': [s.skill for s in skills],
-        'pitched': pitched,
-        'joined': joined,
-        'suggested': suggested
-    }
-
-    return render_template('hacker.html', ctx=ctx)
 
 @app.route('/')
 @app.route('/projects')
@@ -28,10 +10,10 @@ def projects():
         'skills': Skills.get_all(),
         'projects': []
     }
-    for project in Ideas.get_all():
+    for project in Projects.get_all():
         ctx['projects'].append({
             'project': project,
-            'skills': [s.skill for s in IdeasSkills.get_by_idea(project)]
+            'skills': [s.skill for s in ProjectsSkills.get_by_project(project)]
         })
 
     return render_template('projects.html', ctx=ctx)
@@ -39,39 +21,68 @@ def projects():
 
 @app.route('/projects/<int:id>')
 def project(id):
-    project =  Ideas.by_id(id)
-    skills = IdeasSkills.get_by_idea(project)
-    joined = TeamUps.by_idea(id)
+    project =  Projects.by_id(id)
+    skills = ProjectsSkills.get_by_project(project)
+    joined = TeamUps.by_project(id)
 
     ctx = {
-        'idea': project,
+        'project': project,
         'skills': [s.skill for s in skills],
         'joined': joined
     }
 
     return render_template('project.html', ctx=ctx)
 
+@app.route('/projects/<project_id>/join')
+def join(project_id):
+    pass
+
+@app.route('/hackers')
+def hackers():
+    ctx = {
+        'hackers': Hackers.get_all()
+    }
+
+    return render_template('hackers.html', ctx=ctx)
+
+@app.route('/hackers/<hacker>')
+def hacker(hacker):
+    hacker = Hackers.by_user(hacker)
+    skills = HackersSkills.by_hacker(hacker)
+    pitched = Projects.by_hacker(hacker)
+    joined = [x.project for x in TeamUps.by_hacker(hacker)]
+    suggested = Projects.suggest_by_hacker(hacker)
+
+    ctx = {
+        'name': hacker.name,
+        'email': hacker.user+'@everything.me',
+        'skills': [s.skill for s in skills],
+        'pitched': pitched,
+        'joined': joined,
+        'suggested': suggested
+    }
+
+    return render_template('hacker.html', ctx=ctx)
+
+
 @app.route('/skills/<id>')
 def skill(id):
     ctx = {
-        'ideas': Ideas.get_by_skill(id),
+        'projects': Projects.get_by_skill(id),
         'skill': Skills.by_id(id),
-        'skilled': Persons.by_skill(id)
+        'skilled': Hackers.by_skill(id)
     }
 
     return render_template('skill.html', ctx=ctx)
 
-@app.route('/projects/<project_id>/join')
-def join(project_id):
-    pass
 
 @app.route('/api/digest')
 def digest():
     items = []
 
     # no pitch, no team
-    for user in Persons.non_active():
-        suggested = Ideas.suggest_by_person(user)
+    for user in Hackers.non_active():
+        suggested = Projects.suggest_by_hacker(user)
         suggested_count = len(list(suggested))
         params = dict(user=user.user, count=suggested_count)
 
@@ -87,12 +98,12 @@ def digest():
         items.append((email(user.user), msg))
 
     # much pitches
-    for user in Persons.pitched_over_one():
+    for user in Hackers.pitched_over_one():
         msg = settings.MESSAGES['pitch_much'].format(user=user.user, count=user.count)
         items.append((email(user.user), msg))
 
     # much joins
-    for user in Persons.teamed_over_one():
+    for user in Hackers.teamed_over_one():
         msg = settings.MESSAGES['team_much'].format(user=user.user, count=user.count)
         items.append((email(user.user), msg))
 

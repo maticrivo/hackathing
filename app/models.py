@@ -1,5 +1,6 @@
 import peewee
 from db import db
+from settings import CURRENT_HACKATHING
 
 
 class DatabaseModel(peewee.Model):
@@ -7,10 +8,14 @@ class DatabaseModel(peewee.Model):
         database = db.database
 
 
-class Persons(DatabaseModel):
+class Hackers(DatabaseModel):
     id = peewee.IntegerField(primary_key=True)
     name = peewee.CharField(unique=True, null=False)
     user = peewee.CharField(unique=True, null=False)
+
+    @classmethod
+    def get_all(cls):
+        return cls.select()
 
     @classmethod
     def by_user(cls, user):
@@ -21,12 +26,12 @@ class Persons(DatabaseModel):
 
     @classmethod
     def non_active(cls):
-        return cls.select().where(~cls.id << Ideas.select(Ideas.pitcher))
+        return cls.select().where(~cls.id << Projects.select(Projects.hacker))
 
     @classmethod
     def pitched_over_one(cls):
         return cls.select(cls.id, cls.user, peewee.fn.Count(1).alias('count'))\
-                   .join(Ideas)\
+                   .join(Projects)\
                    .group_by(cls)\
                    .having(peewee.fn.Count(1) > 1)
 
@@ -39,9 +44,9 @@ class Persons(DatabaseModel):
 
     @classmethod
     def by_skill(cls, skill_id):
-        return cls.select(cls, PersonsSkills)\
-                  .join(PersonsSkills, on=(cls.id == PersonsSkills.person))\
-                  .where(PersonsSkills.skill == skill_id)
+        return cls.select(cls, HackersSkills)\
+                  .join(HackersSkills, on=(cls.id == HackersSkills.hacker))\
+                  .where(HackersSkills.skill == skill_id)
 
 
 class Skills(DatabaseModel):
@@ -54,99 +59,98 @@ class Skills(DatabaseModel):
 
     @classmethod
     def get_all(cls):
-        return cls.select(cls.id, cls.title, peewee.fn.Count(1).alias('count'))\
-                           .join(Ideas, on=(cls.id == Ideas.id))\
-                           .group_by(cls)\
-                           .having(peewee.fn.Count(1) > 1)
+        # return cls.select(cls.id, cls.title, peewee.fn.Count(1).alias('count')).join(Projects, on=(cls.id == Projects.id)).group_by(cls).having(peewee.fn.Count(1) > 1)
+        return cls.select()
 
 
-class PersonsSkills(DatabaseModel):
-    person = peewee.ForeignKeyField(Persons)
+class HackersSkills(DatabaseModel):
+    hacker = peewee.ForeignKeyField(Hackers)
     skill = peewee.ForeignKeyField(Skills)
 
     class Meta:
-        db_table = 'persons_skills'
+        db_table = 'hackers_skills'
 
     @classmethod
-    def by_person(cls, person):
-        return cls.select(cls.person, Skills.title)\
+    def by_hacker(cls, hacker):
+        return cls.select(cls.hacker, Skills.title)\
                   .join(Skills, on=(cls.skill == Skills.id))\
-                  .where(cls.person == person.id)\
+                  .where(cls.hacker == hacker.id)\
                   .select()
 
 
-class Ideas(DatabaseModel):
+class Projects(DatabaseModel):
     id = peewee.PrimaryKeyField()
     hackathing_id = peewee.IntegerField()
     title = peewee.CharField()
-    pitcher = peewee.ForeignKeyField(Persons)
+    hacker = peewee.ForeignKeyField(Hackers)
     description = peewee.TextField()
 
     @classmethod
     def get_all(cls):
-        return cls.select(cls.title, cls.title, cls.description, Persons.id, Persons.name)\
-               .join(Persons, on=(cls.pitcher == Persons.id))\
+        return cls.select(cls.title, cls.title, cls.description, Hackers.id, Hackers.name)\
+               .where(cls.hackathing_id == CURRENT_HACKATHING)\
+               .join(Hackers, on=(cls.hacker == Hackers.id))\
                .select()
 
     @classmethod
-    def by_person(cls, person):
-        return cls.select(cls.id, cls.title, cls.description).where(cls.pitcher == person.id)
+    def by_hacker(cls, hacker):
+        return cls.select(cls.id, cls.title, cls.description).where(cls.hacker == hacker.id)
 
     @classmethod
     def by_id(cls, id):
         return cls.get(cls.id== id)
 
     @classmethod
-    def suggest_by_person(cls, person):
-        # ideas person already joined
-        already_joined = TeamUps.select(TeamUps.idea).where(TeamUps.person == person.id)
-        # ideas that require skills that match at least one of person's skills
+    def suggest_by_hacker(cls, hacker):
+        # projects hacker already joined
+        already_joined = TeamUps.select(TeamUps.project).where(TeamUps.hacker == hacker.id)
+        # projects that require skills that match at least one of hacker's skills
         match_skills = cls.select(cls.id)\
-                       .join(IdeasSkills, on=(cls.id == IdeasSkills.idea))\
-                       .join(PersonsSkills, on=(IdeasSkills.skill == PersonsSkills.skill))\
-                       .where(PersonsSkills.person == person.id)
+                       .join(ProjectsSkills, on=(cls.id == ProjectsSkills.project))\
+                       .join(HackersSkills, on=(ProjectsSkills.skill == HackersSkills.skill))\
+                       .where(HackersSkills.hacker == hacker.id)
         # add them up
         return cls.select(cls.id, cls.title).where(~cls.id << already_joined).where(cls.id << match_skills)
 
     @classmethod
     def get_by_skill(cls, skill_id):
-        return cls.select(cls.id, cls.title, IdeasSkills.idea).join(IdeasSkills).where(IdeasSkills.skill == skill_id)
+        return cls.select(cls.id, cls.title, ProjectsSkills.project).join(ProjectsSkills).where(ProjectsSkills.skill == skill_id)
 
 
 class TeamUps(DatabaseModel):
-    person = peewee.ForeignKeyField(Persons)
-    idea = peewee.ForeignKeyField(Ideas)
+    hacker = peewee.ForeignKeyField(Hackers)
+    project = peewee.ForeignKeyField(Projects)
 
     class Meta:
         db_table = 'team_ups'
-        primary_key = peewee.CompositeKey('person', 'idea')
+        primary_key = peewee.CompositeKey('hacker', 'project')
 
     @classmethod
-    def by_person(cls, person):
-        return cls.select(cls.idea, cls.person, Ideas.title)\
-                  .join(Ideas, on=(cls.idea == Ideas.id))\
-                  .where(cls.person == person.id)\
+    def by_hacker(cls, hacker):
+        return cls.select(cls.project, cls.hacker, Projects.title)\
+                  .join(Projects, on=(cls.project == Projects.id))\
+                  .where(cls.hacker == hacker.id)\
                   .select()
 
     @classmethod
-    def by_idea(cls, id):
-        return cls.select(cls.idea, Persons.name, Persons.id, Persons.user)\
-                  .join(Persons, on=(Persons.id == cls.person))\
-                  .where(cls.idea == id)
+    def by_project(cls, id):
+        return cls.select(cls.project, Hackers.name, Hackers.id, Hackers.user)\
+                  .join(Hackers, on=(Hackers.id == cls.hacker))\
+                  .where(cls.project == id)
 
 
-class IdeasSkills(DatabaseModel):
-    idea = peewee.ForeignKeyField(Ideas)
+class ProjectsSkills(DatabaseModel):
+    project = peewee.ForeignKeyField(Projects)
     skill = peewee.ForeignKeyField(Skills)
     quantity = peewee.IntegerField()
 
     class Meta:
-        db_table = 'ideas_skills'
-        primary_key = peewee.CompositeKey('idea', 'skill')
+        db_table = 'projects_skills'
+        primary_key = peewee.CompositeKey('project', 'skill')
 
     @classmethod
-    def get_by_idea(cls, idea):
-        return cls.select(cls.idea, Ideas.title)\
-                   .join(Ideas, on=(cls.idea == Ideas.id))\
-                   .where(cls.idea == idea.id)\
+    def get_by_project(cls, project):
+        return cls.select(cls.project, Projects.title)\
+                   .join(Projects, on=(cls.project == Projects.id))\
+                   .where(cls.project == project.id)\
                    .select()
