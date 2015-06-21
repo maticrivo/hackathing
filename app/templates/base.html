@@ -10,7 +10,6 @@
 
     <script src="/static/components/jquery/dist/jquery.min.js"></script>
     <script src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/static/components/bootstrap-material-design/dist/js/ripples.min.js"></script>
     <script src="/static/components/bootstrap-material-design/dist/js/material.min.js"></script>
 
   </head>
@@ -28,9 +27,10 @@
           <div class="navbar-collapse collapse navbar-responsive-collapse">
               <div class="nav navbar-nav navbar-right">
                   {% if current_user.name %}
-                    {{ current_user.name }}
+
+                  <a href="{{ url_for('hacker', hacker=current_user.user) }}" class="btn">{{ current_user.name }}</a>
                   {% else %}
-                    <a href="/login" class="btn" role="login">Login</a>
+                    <a href="{{ url_for('login') }}" class="btn" role="login">Login</a>
                   {% endif %}
               </div>
           </div>
@@ -51,7 +51,7 @@
               <li><a href="/hackers">Hackers</a></li>
           </ul>
           <div class="nav navbar-nav navbar-right">
-              <a class="btn btn-primary btn-sm" href="/projects/new">Pitch a new project</a>
+              <a class="btn btn-primary btn-sm" href="{{ url_for('new_project') }}">Pitch a new project</a>
           </div>
         </div>
       </div>

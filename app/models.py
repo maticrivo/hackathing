@@ -13,10 +13,11 @@ class Hackers(DatabaseModel):
     id = peewee.IntegerField(primary_key=True)
     name = peewee.CharField(unique=True, null=False)
     user = peewee.CharField(unique=True, null=False)
+    active = peewee.BooleanField(default=1)
 
     @classmethod
     def get_all(cls):
-        return cls.select()
+        return cls.select().filter(cls.active == 1)
 
     @classmethod
     def by_user(cls, user):
