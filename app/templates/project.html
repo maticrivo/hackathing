@@ -2,35 +2,35 @@
 {% import "macros.html" as m %}
 {% block body %}
 
-<div id="project" class="panel panel-info">
-  <div class="panel-heading">
-    <h1>{{ ctx.project.title }}</h1>
-    <p>
-      {{ ctx.project.description }}
-      <br /><br />
-      Pitched by <a href="{{ url_for('hacker', hacker=ctx.project.hacker.user) }}">{{ ctx.project.hacker.name }}</a>
-    </p>
-  </div>
-  <div class="panel-body">
-    {% if current_user.id in ctx.joined|map(attribute='hacker')|map(attribute='id')|list() %}
-      <a href="/api/leave/{{ ctx.project.id }}" class="btn btn-primary">Leave {{ ctx.project.title }}</a>
-    {% else %}
-      <a href="/api/join/{{ ctx.project.id }}" class="btn btn-primary">Join project now</a>
-    {% endif %}
+<div class="container">
+  <div id="project" class="panel panel-info">
+    <div class="panel-heading">
+      <h1>{{ ctx.project.title }}</h1>
+      <p>
+        {{ ctx.project.description }}
+        <br /><br />
+        Pitched by <a href="{{ url_for('hacker', hacker=ctx.project.hacker.user) }}">{{ ctx.project.hacker.name }}</a>
+      </p>
+    </div>
+    <div class="panel-body">
+      {% if current_user.id in ctx.joined|map(attribute='hacker')|map(attribute='id')|list() %}
+        <a href="/api/leave/{{ ctx.project.id }}" class="btn btn-primary">Leave {{ ctx.project.title }}</a>
+      {% else %}
+        <a href="/api/join/{{ ctx.project.id }}" class="btn btn-primary">Join project now</a>
+      {% endif %}
 
-    <h5>Already joined</h5>
-    {% for data in ctx.joined %}
-    {{ m.hacker(data.hacker.user, data.hacker.name) }}
-    {% endfor %}
+      <h5>Already joined</h5>
+      {% for data in ctx.joined %}
+      {{ m.hacker(data.hacker.user, data.hacker.name) }}
+      {% endfor %}
 
-    <h5>Required skills</h5>
-    {% for data in ctx.skills %}
-      {{ m.skill(data.id, data.title) }}
-    {% endfor %}
+      <h5>Required skills</h5>
+      {% for data in ctx.skills %}
+        {{ m.skill(data.id, data.title) }}
+      {% endfor %}
+    </div>
   </div>
+
+  {% include 'disqus.html' %}
 </div>
-
-
-{% include 'disqus.html' %}
-
 {% endblock body %}

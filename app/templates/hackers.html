@@ -2,21 +2,12 @@
 {% import "macros.html" as m %}
 {% block body %}
 
-<ul id="hackers">
-  {% for hacker in ctx.hackers %}
-    {{ m.hacker(hacker.user, hacker.name) }}
-  {% endfor %}
-</ul>
-
-<script src="/static/components/mixitup/build/jquery.mixitup.min.js"></script>
-<script>
-  $('#projects').mixItUp({
-	animation: {
-		duration: 400,
-		effects: 'fade translateZ(-360px) stagger(34ms)',
-		easing: 'ease'
-	}
-});
-</script>
+<div class="container">
+	<ul id="hackers">
+	  {% for hacker in ctx.hackers|sort(attribute='user') %}
+		{{ m.hacker(hacker.user, hacker.name) }}
+	  {% endfor %}
+	</ul>
+</div>
 
 {% endblock body %}

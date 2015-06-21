@@ -1,51 +1,79 @@
 {% extends "base.html" %}
 {% block body %}
-
-{% for data in ctx.skills %}
-  <a href="javascript:void(0)" class="filter" data-filter=".skill_{{ data.id }}">{{ data.title }}</a>
-{% endfor %}
-
-<div id="projects">
-
-  {% set colors = ['#ec407a', '#ab47bc', '#26c6da', '#ffca28', '#29b6f6', '#e84e40', '#5c6bc0', '#ff7043', '#9ccc65'] %}
-  {% set icons = ['mdi-action-face-unlock', 'mdi-action-find-in-page', 'mdi-action-polymer', 'mdi-action-settings-remote', 'mdi-action-view-quilt', 'mdi-communication-ring-volume'] %}
-  {% for data in ctx.projects %}
-    {% set color = colors[loop.index%colors|length] %}
-    {% set icon = icons[loop.index%icons|length] %}
-
-    {% set skills_classname = data.skills|map(attribute='id')|list|prefix('skill_')|join(' ') %}
-    {% set classname = 'project flip-container mix hackathing-'~data.project.hackathing_id+' '+skills_classname %}
-
-    <div class="{{ classname }}" data-myorder="{{ loop.index }}">
-      <div class="flipper">
-        <div class="panel front" style="background-color: {{ color }}">
-          <div class="panel-body">
-            <icon class="{{ icon }}"></icon>
-            <title>{{ data.project.title }}</title>
-          </div>
-        </div>
-        <div class="panel back">
-          <div class="panel-body">
-            <h3>{{ data.project.title }}</h3>
-            <p>{{ data.project.description }}</p>
-            <pitcher>Pitched by {{ data.project.hacker.user }}</pitcher>
-            <a href="/projects/{{ data.project.id }}" class="btn btn-primary btn-xs">more info</a>
-          </div>
-        </div>
-      </div>
+<div class="navbar navbar-material-cyan-800" id="affix">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
     </div>
-  {% endfor %}
+    <div class="navbar-collapse collapse navbar-responsive-collapse">
+      <ul class="nav navbar-nav" id="tag-filter">
+        {% for data in ctx.skills %}
+          <li><a href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"
+                 data-tag=".{{ data.title }}" onclick="app.filter('.{{ data.title }}')">{{ data.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
 </div>
 
+<div class="container">
+  <div id="projects">
+    {% for data in ctx.projects %}
+    <div class="project mix {{ data.skills|map(attribute='title')|list|join(' ') }}"
+         data-myorder="{{ loop.index }}" id="project-{{ data.project.id }}">
+        <style>
+          #project-{{ data.project.id }} .panel,
+          #project-{{ data.project.id }} icon{
+            color: #E53935
+          }
+          #project-{{ data.project.id }} .panel,
+          #project-{{ data.project.id }} hr,
+          #project-{{ data.project.id }} tags button {
+            background-color: #E53935;
+          }
+          #project-{{ data.project.id }} links a:hover {
+            background-color: rgba(229,57,53, 0.2);
+          }
+        </style>
+        <div class="panel">
+          <panel-heading>
+            <icon class="icon mdi-social-poll" style="background-image: url()"></icon>
+            <div>
+              <title>{{ data.project.title }}</title>
+            </div>
+            <tags>
+                {% for skill in data.skills %}
+                <button onclick="app.filter('.{{ skill.title }}', true)">{{ skill.title }}</button>
+                {% endfor %}
+            </tags>
+            <hr>
+          </panel-heading>
+          <panel-body>
+            {{ data.project.description }}
+            <links>
+              <a href="{{ url_for('project', id=data.project.id) }}" target="_blank" class="btn btn-flat">
+                <i class="mdi-action-home">
+                </i>Project page
+              </a>
+            </links>
+          </panel-body>
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="gap"></div>
+    <div class="gap"></div>
+  </div>
+</div>
+
+<script src="/static/components/jquery/dist/jquery.min.js"></script>
+<script src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/static/components/mixitup/build/jquery.mixitup.min.js"></script>
-<script>
-  $('#projects').mixItUp({
-	animation: {
-		duration: 400,
-		effects: 'fade translateZ(-360px) stagger(34ms)',
-		easing: 'ease'
-	}
-});
-</script>
+<script src="static/app.js"></script>
+<script>var app = App();</script>
 
 {% endblock body %}

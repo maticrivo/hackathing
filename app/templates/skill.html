@@ -1,20 +1,21 @@
 {% extends "base.html" %}
 {% block body %}
 
-<h1 class="label label-default">{{ ctx.skill.title }}</h1>
+<div class="container">
+  <h1 class="label label-default">{{ ctx.skill.title }}</h1>
 
-<h3>Projects:</h3>
-<ul>
-{% for project in ctx.projects %}
-  <li><a href="/projects/{{ project.id }}">{{ project.title }}</a></li>
-{% endfor %}
-</ul>
+  <h3>Projects:</h3>
+  <ul>
+  {% for project in ctx.projects %}
+    <li><a href="/projects/{{ project.id }}">{{ project.title }}</a></li>
+  {% endfor %}
+  </ul>
 
-<h3>Skilled:</h3>
-<ul>
-{% for hacker in ctx.skilled %}
-  <li><a href="/hackers/{{ hacker.user }}">{{ hacker.name }}</a></li>
-{% endfor %}
-</ul>
-
+  <h3>Skilled:</h3>
+  <ul>
+  {% for hacker in ctx.skilled %}
+    <li><a href="/hackers/{{ hacker.user }}">{{ hacker.name }}</a></li>
+  {% endfor %}
+  </ul>
+</div>
 {% endblock body %}
