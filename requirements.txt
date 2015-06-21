@@ -1,4 +1,6 @@
-flask
+Flask
+Flask-Login
+Flask-GoogleLogin
 peewee
 MySQL-python
 hypchat

@@ -2,8 +2,6 @@
 {% import "macros.html" as m %}
 {% block body %}
 
-{{ m.breadcrumbs([('Hackers', '/hackers'), ctx.name]) }}
-
 <div class="panel panel-default">
   <div class="panel-body">
     <div class="col-md-2">
@@ -22,7 +20,6 @@
       {% for data in ctx.pitched %}
         {{ m.project(data.id, data.title, 'pitched') }}
       {% endfor %}
-      {{ m.icon_button('mdi-content-add', url='/pitch') }}
 
       <h5>Joined</h5>
       {% for data in ctx.joined %}

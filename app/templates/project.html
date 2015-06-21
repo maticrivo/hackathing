@@ -2,8 +2,6 @@
 {% import "macros.html" as m %}
 {% block body %}
 
-{{ m.breadcrumbs([('Projects', url_for('projects')), ctx.project.title]) }}
-
 <div id="project" class="panel panel-info">
   <div class="panel-heading">
     <h1>{{ ctx.project.title }}</h1>
@@ -14,6 +12,12 @@
     </p>
   </div>
   <div class="panel-body">
+    {% if current_user.id in ctx.joined|map(attribute='hacker')|map(attribute='id')|list() %}
+      <a href="/api/leave/{{ ctx.project.id }}" class="btn btn-primary">Leave {{ ctx.project.title }}</a>
+    {% else %}
+      <a href="/api/join/{{ ctx.project.id }}" class="btn btn-primary">Join project now</a>
+    {% endif %}
+
     <h5>Already joined</h5>
     {% for data in ctx.joined %}
     {{ m.hacker(data.hacker.user, data.hacker.name) }}
@@ -24,7 +28,6 @@
       {{ m.skill(data.id, data.title) }}
     {% endfor %}
   </div>
-  {{ m.icon_button('mdi-social-hacker-add', url=url_for('join', project_id=ctx.project.id), type='action') }}
 </div>
 
 

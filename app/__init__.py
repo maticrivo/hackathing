@@ -1,5 +1,19 @@
+import os, logging
 from flask import Flask
+from flask_googlelogin import GoogleLogin
+
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
+app.config.update(
+    GOOGLE_LOGIN_CLIENT_ID=os.environ['GOOGLE_LOGIN_CLIENT_ID'],
+    GOOGLE_LOGIN_CLIENT_SECRET=os.environ['GOOGLE_LOGIN_CLIENT_SECRET'],
+    GOOGLE_LOGIN_REDIRECT_URI='http://127.0.0.1:5000/oauth2callback',
+    GOOGLE_LOGIN_SCOPES='email',
+    SECRET_KEY='hackathing_secret'
+)
+auth = GoogleLogin(app=app)
+
 
 from hypchat import HypChat
 from settings import HIPCHAT

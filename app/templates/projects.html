@@ -1,35 +1,12 @@
 {% extends "base.html" %}
-{% import "macros.html" as m %}
 {% block body %}
 
-{{ m.breadcrumbs(['Projects']) }}
-
-<div class="navbar navbar-secondary">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="javascript:void(0)">Fliter</a>
-    </div>
-    <div class="navbar-collapse collapse navbar-responsive-collapse">
-        <ul class="nav navbar-nav">
-            <li><a href="javascript:void(0)" class="sort" data-sort="random">Random</a></li>
-            <li class="dropdown">
-                <a href="bootstrap-elements.html" data-target="#" class="dropdown-toggle" data-toggle="dropdown">By Skill <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="javascript:void(0)" class="filter" data-filter="all">All</a></li>
-                  {% for data in ctx.skills %}
-                  <li><a href="javascript:void(0)" class="filter" data-filter=".skill_{{ data.id }}">{{ data.title }}</a></li>
-                  {% endfor %}
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
+{% for data in ctx.skills %}
+  <a href="javascript:void(0)" class="filter" data-filter=".skill_{{ data.id }}">{{ data.title }}</a>
+{% endfor %}
 
 <div id="projects">
+
   {% set colors = ['#ec407a', '#ab47bc', '#26c6da', '#ffca28', '#29b6f6', '#e84e40', '#5c6bc0', '#ff7043', '#9ccc65'] %}
   {% set icons = ['mdi-action-face-unlock', 'mdi-action-find-in-page', 'mdi-action-polymer', 'mdi-action-settings-remote', 'mdi-action-view-quilt', 'mdi-communication-ring-volume'] %}
   {% for data in ctx.projects %}

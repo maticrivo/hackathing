@@ -1,6 +1,7 @@
 import peewee
 from db import db
 from settings import CURRENT_HACKATHING
+from flask_login import current_user
 
 
 class DatabaseModel(peewee.Model):
@@ -38,7 +39,7 @@ class Hackers(DatabaseModel):
     @classmethod
     def teamed_over_one(cls):
         return cls.select(cls.id, cls.user, peewee.fn.Count(1).alias('count'))\
-               .join(TeamUps)\
+               .join(ProjectsHackers)\
                .group_by(cls)\
                .having(peewee.fn.Count(1) > 1)
 
@@ -47,6 +48,7 @@ class Hackers(DatabaseModel):
         return cls.select(cls, HackersSkills)\
                   .join(HackersSkills, on=(cls.id == HackersSkills.hacker))\
                   .where(HackersSkills.skill == skill_id)
+
 
 
 class Skills(DatabaseModel):
@@ -61,6 +63,24 @@ class Skills(DatabaseModel):
     def get_all(cls):
         # return cls.select(cls.id, cls.title, peewee.fn.Count(1).alias('count')).join(Projects, on=(cls.id == Projects.id)).group_by(cls).having(peewee.fn.Count(1) > 1)
         return cls.select()
+
+    @classmethod
+    def add(cls, *titles, **kwargs):
+        # get ids (create if title not found)
+        ids = []
+        for title in titles:
+            title = title.strip().lower()
+            try:
+                data = cls.get(title=title)
+            except cls.DoesNotExist:
+                cls.create(title=title)
+                data = cls.get(title=title)
+            ids.append(data.id)
+
+        # attach to project
+        project_id = kwargs.get('project_id', None)
+        if project_id:
+            ProjectsSkills.add(project_id, *ids)
 
 
 class HackersSkills(DatabaseModel):
@@ -105,7 +125,7 @@ class Projects(DatabaseModel):
     @classmethod
     def suggest_by_hacker(cls, hacker):
         # projects hacker already joined
-        already_joined = TeamUps.select(TeamUps.project).where(TeamUps.hacker == hacker.id)
+        already_joined = ProjectsHackers.select(ProjectsHackers.project).where(ProjectsHackers.hacker == hacker.id)
 
         # projects that require skills that match at least one of hacker's skills
         match_skills = cls.select(cls.id)\
@@ -124,13 +144,24 @@ class Projects(DatabaseModel):
                     .join(ProjectsSkills)\
                     .where(ProjectsSkills.skill == skill_id)
 
+    @classmethod
+    def add(cls, **kwargs):
+        project = cls.create(
+            title=kwargs.get('title'),
+            description=kwargs.get('description'),
+            hackathing_id=CURRENT_HACKATHING,
+            hacker=current_user.id
+        )
+        project.save()
+        return project
 
-class TeamUps(DatabaseModel):
+
+class ProjectsHackers(DatabaseModel):
     hacker = peewee.ForeignKeyField(Hackers)
     project = peewee.ForeignKeyField(Projects)
 
     class Meta:
-        db_table = 'team_ups'
+        db_table = 'projects_hackers'
         primary_key = peewee.CompositeKey('hacker', 'project')
 
     @classmethod
@@ -146,11 +177,17 @@ class TeamUps(DatabaseModel):
                   .join(Hackers, on=(Hackers.id == cls.hacker))\
                   .where(cls.project == id)
 
+    @classmethod
+    def add(cls, project_id, hacker_id):
+        return cls.create(project=project_id, hacker=hacker_id)
+
+    @classmethod
+    def remove(cls, project_id, hacker_id):
+        return cls.delete().where(cls.project == project_id, cls.hacker == hacker_id).execute()
 
 class ProjectsSkills(DatabaseModel):
     project = peewee.ForeignKeyField(Projects)
     skill = peewee.ForeignKeyField(Skills)
-    quantity = peewee.IntegerField()
 
     class Meta:
         db_table = 'projects_skills'
@@ -162,3 +199,8 @@ class ProjectsSkills(DatabaseModel):
                    .join(Projects, on=(cls.project == Projects.id))\
                    .where(cls.project == project.id)\
                    .select()
+
+    @classmethod
+    def add(cls, project_id, *skill_ids):
+        for skill_id in skill_ids:
+            cls.create(project=project_id, skill=skill_id)
