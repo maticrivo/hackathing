@@ -13,7 +13,7 @@
       <ul class="nav navbar-nav" id="tag-filter">
         {% for data in ctx.skills %}
           <li><a href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"
-                 data-tag=".{{ data.title }}" onclick="app.filter('.{{ data.title }}')">{{ data.title }}</a></li>
+                 data-tag=".{{ data.title|escape }}" onclick="app.filter('.{{ data.title|escape }}')">{{ data.title }}</a></li>
         {% endfor %}
       </ul>
     </div>
@@ -23,7 +23,7 @@
 <div class="container">
   <div id="projects">
     {% for data in ctx.projects %}
-    <div class="project mix {{ data.skills|map(attribute='title')|list|join(' ') }}"
+    <div class="project mix {{ data.skills|map(attribute='title')|map('escape')|list|join(' ') }}"
          data-myorder="{{ loop.index }}" id="project-{{ data.project.id }}">
         <style>
           #project-{{ data.project.id }} .panel,
@@ -47,7 +47,7 @@
             </div>
             <tags>
                 {% for skill in data.skills %}
-                <button onclick="app.filter('.{{ skill.title }}', true)">{{ skill.title }}</button>
+                <button onclick="app.filter('.{{ skill.title|escape }}', true)">{{ skill.title }}</button>
                 {% endfor %}
             </tags>
             <hr>

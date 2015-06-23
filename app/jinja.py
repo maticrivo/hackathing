@@ -19,8 +19,12 @@ def rgb(hex):
 
     return '{},{},{}'.format(_HEXDEC[hex[0:2]], _HEXDEC[hex[2:4]], _HEXDEC[hex[4:6]])
 
+def escape(txt):
+    return txt.replace(' ', '-')
+
 def setup_jinja(app):
     app.jinja_env.filters['md5'] = md5
     app.jinja_env.filters['prefix'] = prefix
     app.jinja_env.filters['colorize'] = colorize
     app.jinja_env.filters['rgb'] = rgb
+    app.jinja_env.filters['escape'] = escape

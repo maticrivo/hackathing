@@ -8,7 +8,7 @@ from login import requires_login
 @app.route('/projects')
 def projects():
     ctx = {
-        'skills': Skills.get_all(),
+        'skills': Skills.get_all_in_projects(),
         'projects': []
     }
     for project in Projects.get_all():
