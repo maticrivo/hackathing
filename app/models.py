@@ -62,8 +62,13 @@ class Skills(DatabaseModel):
 
     @classmethod
     def get_all(cls):
-        # return cls.select(cls.id, cls.title, peewee.fn.Count(1).alias('count')).join(Projects, on=(cls.id == Projects.id)).group_by(cls).having(peewee.fn.Count(1) > 1)
         return cls.select()
+
+    @classmethod
+    def get_all_in_projects(cls):
+        return cls.select()\
+            .join(ProjectsSkills, on=(cls.id == ProjectsSkills.skill))\
+            .group_by(cls.id)
 
     @classmethod
     def add(cls, *titles, **kwargs):
