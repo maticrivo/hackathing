@@ -43,7 +43,7 @@
           <ul class="nav navbar-nav navbar-right">
               <li>
               {% if current_user.name %}
-              <a href="{{ url_for('new_project') }}" class="btn btn-sm">Pitch a project</a>
+              <a href="{{ url_for('new_project') }}" class="btn btn-default btn-sm">Pitch a project</a>
               {% else %}
                 <a href="{{ url_for('login') }}">Login</a>
               {% endif %}

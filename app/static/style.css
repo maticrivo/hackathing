@@ -12,6 +12,9 @@
 .panel-heading a {
   color: #ffffff;
 }
+.panel-info>.panel-heading {
+  background-color: #00838F;
+}
 
 header > .container > div {
   position: relative;
@@ -21,4 +24,15 @@ a[role="username"] {
   right: 0;
   top: 40px;
   color: rgba(255,255,255,0.5);
+}
+.navbar-nav .btn {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.btn-default {
+  background-color: white !important;
+}
+.btn-default:hover {
+  color: black !important;
 }
