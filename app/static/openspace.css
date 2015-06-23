@@ -158,13 +158,13 @@ header p a:hover {
 }
 
 /* panel */
-.panel {
+.project .panel {
   padding: 20px;
   overflow: hidden;
   position: relative;
   height: 196px;
 }
-.panel .icon {
+.project .panel .icon {
   display: block;
   width: 35px;
   height: 35px;
@@ -282,30 +282,30 @@ body[data-os="ios"] .panel {
   cursor: pointer; /* turn hovers into clicks in ios */
 }
 links,
-panel-heading title,
-.panel tags {
+.project panel-heading title,
+.project .panel tags {
   transition: all 0.15s ease;
 }
-.panel:not(:hover),
-.panel:not(:hover) icon,
-.panel:not(:hover) stars,
-.panel:not(:hover) forks {
+.project .panel:not(:hover),
+.project .panel:not(:hover) icon,
+.project .panel:not(:hover) stars,
+.project .panel:not(:hover) forks {
   color: white !important;
 }
-.panel:hover,
-.panel:not(:hover) panel-heading hr {
+.project .panel:hover,
+.project .panel:not(:hover) panel-heading hr {
   background-color: white !important;
 }
-.panel:hover panel-heading .icon,
-.panel:not(:hover) tags {
+.project .panel:hover panel-heading .icon,
+.project .panel:not(:hover) tags {
   opacity: 0;
 }
-.panel:hover links{
+.project .panel:hover links{
   transform: translateY(-77px);
   -webkit-transform: translateY(-77px);
 }
-.panel:hover panel-heading title,
-.panel:hover panel-heading tags {
+.project .panel:hover panel-heading title,
+.project .panel:hover panel-heading tags {
   transform: translateY(-45px);
   -webkit-transform: translateY(-45px);
 }

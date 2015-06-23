@@ -9,3 +9,16 @@
 #projects .panel {
   height: 196px;
 }
+.panel-heading a {
+  color: #ffffff;
+}
+
+header > .container > div {
+  position: relative;
+}
+a[role="username"] {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  color: rgba(255,255,255,0.5);
+}

@@ -11,12 +11,16 @@
     <link rel="stylesheet" href="/static/style.css">
 
     <script src="/static/components/jquery/dist/jquery.min.js"></script>
+    <script src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
   <body>
     <header class="navbar navbar-material-cyan-800">
       <div class="container">
         <h1><a href="{{ url_for('projects') }}"><img src="/static/logo.png" alt="EverythingMe" width="166" /></a></h1>
         <div>
+          {% if current_user.name %}
+          <a href="{{ url_for('hacker', hacker=current_user.user) }}" role="username">{{ current_user.name }}</a>
+          {% endif %}
           <h2>HackAthing #7</h2>
           <p>July 7-8 '15. Showcase July 9th 9:30am.</p>
         </div>
@@ -39,7 +43,7 @@
           <ul class="nav navbar-nav navbar-right">
               <li>
               {% if current_user.name %}
-              <a href="{{ url_for('hacker', hacker=current_user.user) }}">{{ current_user.name }}</a>
+              <a href="{{ url_for('new_project') }}" class="btn btn-sm">Pitch a project</a>
               {% else %}
                 <a href="{{ url_for('login') }}">Login</a>
               {% endif %}

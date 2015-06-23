@@ -28,8 +28,20 @@
       {% for data in ctx.skills %}
         {{ m.skill(data.id, data.title) }}
       {% endfor %}
+
+      {{ m.icon_button('mdi-content-add', modal='add_skill') }}
     </div>
   </div>
+
+    {% call m.modal('Add a skill', 'add_skill', 'hello') %}
+    {% for i in [1, 2, 3] %}
+    <div class="togglebutton">
+        <label>
+            <input type="checkbox" checked=""> Skill {{ i }}
+        </label>
+    </div>
+    {% endfor %}
+  {% endcall %}
 
   {% include 'disqus.html' %}
 </div>
