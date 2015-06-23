@@ -88,6 +88,11 @@ class Skills(DatabaseModel):
         if project_id:
             ProjectsSkills.add(project_id, *ids)
 
+        # attach to hacker
+        hacker_id = kwargs.get('hacker_id', None)
+        if hacker_id:
+            HackersSkills.add(hacker_id, *ids)
+
 
 class HackersSkills(DatabaseModel):
     hacker = peewee.ForeignKeyField(Hackers)
@@ -102,6 +107,14 @@ class HackersSkills(DatabaseModel):
                   .join(Skills, on=(cls.skill == Skills.id))\
                   .where(cls.hacker == hacker.id)\
                   .select()
+
+    @classmethod
+    def add(cls, hacker_id, *skill_ids):
+        for skill_id in skill_ids:
+            try:
+                cls.create(hacker=hacker_id, skill=skill_id)
+            except peewee.IntegrityError:
+                pass
 
 
 class Projects(DatabaseModel):
@@ -209,4 +222,7 @@ class ProjectsSkills(DatabaseModel):
     @classmethod
     def add(cls, project_id, *skill_ids):
         for skill_id in skill_ids:
-            cls.create(project=project_id, skill=skill_id)
+            try:
+                cls.create(project=project_id, skill=skill_id)
+            except peewee.IntegrityError:
+                pass

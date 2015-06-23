@@ -36,14 +36,29 @@
     </div>
   </div>
 
-  {% call m.modal('Add a skill', 'add_skill', 'hello') %}
-    {% for i in [1, 2, 3] %}
-    <div class="togglebutton">
-        <label>
-            <input type="checkbox" checked=""> Skill {{ i }}
-        </label>
-    </div>
-    {% endfor %}
-  {% endcall %}
+  {{ m.add_skill('add_skill', '/api/hackers/'+ctx.user+'/skills/add') }}
 </div>
+
+<script src="/static/components/bootstrap-material-design/dist/js/material.min.js"></script>
+<script src="/static/components/selectize/dist/js/standalone/selectize.min.js"></script>
+<script>
+    $.material.init()
+    $('#skills').selectize({
+        delimiter: ',',
+        persist: false,
+        searchField: 'text',
+        options: [
+            {% for skill in ctx.all_skills %}
+            {value: '{{ skill.title }}', text: '{{ skill.title }}'},
+            {% endfor %}
+        ],
+        create: function(input) {
+            return {
+                value: input,
+                text: input
+            }
+        }
+    });
+</script>
+
 {% endblock body %}

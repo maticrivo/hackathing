@@ -60,4 +60,28 @@
      </form>
   </div>
 </div>
- {%- endmacro %}
+{%- endmacro %}
+
+{% macro add_skill(modal_id, url) -%}
+<div class="modal fade" id="{{ modal_id }}" role="dialog">
+  <div class="modal-dialog">
+    <form class="modal-content inline-form" method="POST" action="{{ url }}">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Add skills</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-group form-control-wrapper">
+              <input type="text" class="form-control empty" id="skills" name="skills" />
+              <div class="floating-label">Required Skills</div>
+              <div class="hint">Comma separated.</div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+     </form>
+  </div>
+</div>
+{%- endmacro %}

@@ -28,6 +28,7 @@ def project(id):
     ctx = {
         'project': project,
         'skills': [s.skill for s in skills],
+        'all_skills': Skills.get_all(),
         'joined': joined
     }
 
@@ -62,6 +63,12 @@ def api_join(project_id):
     return redirect(url_for('project', id=project_id))
 
 
+@app.route('/api/projects/<int:project_id>/skills/add', methods=['POST'])
+def api_new_project_skill(project_id):
+    Skills.add(project_id=project_id, *request.form['skills'].split(','))
+    return redirect(url_for('project', id=project_id))
+
+
 @app.route('/hackers')
 def hackers():
     ctx = {
@@ -81,13 +88,22 @@ def hacker(hacker):
     ctx = {
         'name': hacker.name,
         'email': hacker.user+'@everything.me',
+        'user': hacker.user,
         'skills': [s.skill for s in skills],
+        'all_skills': Skills.get_all(),
         'pitched': pitched,
         'joined': joined,
         'suggested': suggested
     }
 
     return render_template('hacker.html', ctx=ctx)
+
+
+@app.route('/api/hackers/<hacker>/skills/add', methods=['POST'])
+def api_new_hacker_skill(hacker):
+    hacker = Hackers.by_user(hacker)
+    Skills.add(hacker_id=hacker.id, *request.form['skills'].split(','))
+    return redirect(url_for('hacker', hacker=hacker.user))
 
 
 @app.route('/skills/<id>')
