@@ -1,21 +1,24 @@
 {% extends "base.html" %}
+{% import "macros.html" as m %}
 {% block body %}
 
 <div class="container">
-  <h1 class="label label-default">{{ ctx.skill.title }}</h1>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h1>{{ ctx.skill.title }}</h1>
+    </div>
+    <div class="panel-body">
+      <h5>Projects requiring {{ ctx.skill.title }}</h5>
+      <p>{% for project in ctx.projects %}
+        {{ m.project(project.id, project.title) }}
+      {% endfor %}</p>
 
-  <h3>Projects:</h3>
-  <ul>
-  {% for project in ctx.projects %}
-    <li><a href="/projects/{{ project.id }}">{{ project.title }}</a></li>
-  {% endfor %}
-  </ul>
+      <h5>Hackers skilled with {{ ctx.skill.title }}</h5>
+      <p>{% for hacker in ctx.skilled %}
+        {{ m.hacker(hacker.user, hacker.name) }}
+      {% endfor %}</p>
 
-  <h3>Skilled:</h3>
-  <ul>
-  {% for hacker in ctx.skilled %}
-    <li><a href="/hackers/{{ hacker.user }}">{{ hacker.name }}</a></li>
-  {% endfor %}
-  </ul>
+    </div>
+  </div>
 </div>
 {% endblock body %}

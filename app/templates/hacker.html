@@ -3,7 +3,7 @@
 {% block body %}
 
 <div class="container">
-  <div class="panel panel-default">
+  <div class="panel panel-primary">
     <div class="panel-body">
       <div class="col-md-2">
         <img class="circle" src="http://gravatar.com/avatar/{{ ctx.email | md5 }}?s=116" />
@@ -12,25 +12,26 @@
         <h1>{{ ctx.name }}</h1>
 
         <h5>Skills</h5>
-        {% for data in ctx.skills %}
+        <p>{% for data in ctx.skills %}
           {{ m.skill(data.id, data.title) }}
         {% endfor %}
         {{ m.icon_button('mdi-content-add', modal='add_skill') }}
+        </p>
 
         <h5>Pitched</h5>
-        {% for data in ctx.pitched %}
+        <p>{% for data in ctx.pitched %}
           {{ m.project(data.id, data.title, 'pitched') }}
-        {% endfor %}
+        {% endfor %}</p>
 
         <h5>Joined</h5>
-        {% for data in ctx.joined %}
+        <p>{% for data in ctx.joined %}
           {{ m.project(data.id, data.title, 'joined') }}
-        {% endfor %}
+        {% endfor %}</p>
 
         <h5>Can join</h5>
-        {% for data in ctx.suggested %}
+        <p>{% for data in ctx.suggested %}
           {{ m.project(data.id, data.title, 'suggested') }}
-        {% endfor %}
+        {% endfor %}</p>
       </div>
     </div>
   </div>

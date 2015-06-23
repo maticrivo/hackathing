@@ -12,7 +12,7 @@
 .panel-heading a {
   color: #ffffff;
 }
-.panel-info>.panel-heading {
+.panel-primary > .panel-heading {
   background-color: #00838F;
 }
 
@@ -35,4 +35,12 @@ a[role="username"] {
 }
 .btn-default:hover {
   color: black !important;
+}
+
+h5 + p:not(:last-of-type) {
+  margin-bottom: 30px
+}
+h5 + p:empty:after {
+  content: 'N/A';
+  color: #cccccc;
 }

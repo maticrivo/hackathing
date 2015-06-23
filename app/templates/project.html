@@ -3,7 +3,7 @@
 {% block body %}
 
 <div class="container">
-  <div class="panel panel-info">
+  <div class="panel panel-primary">
     <div class="panel-heading" style="background-color: {{ ctx.project.title|colorize }}">
       <h1>{{ ctx.project.title }}</h1>
       <p>
@@ -20,16 +20,16 @@
       {% endif %}
 
       <h5>Already joined</h5>
-      {% for data in ctx.joined %}
+      <p>{% for data in ctx.joined %}
       {{ m.hacker(data.hacker.user, data.hacker.name) }}
-      {% endfor %}
+      {% endfor %}</p>
 
       <h5>Required skills</h5>
-      {% for data in ctx.skills %}
+      <p>{% for data in ctx.skills %}
         {{ m.skill(data.id, data.title) }}
       {% endfor %}
-
       {{ m.icon_button('mdi-content-add', modal='add_skill') }}
+      </p>
     </div>
   </div>
 
