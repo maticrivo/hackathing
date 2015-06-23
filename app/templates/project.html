@@ -26,7 +26,7 @@
 
       <h5>Required skills</h5>
       <p>{% for data in ctx.skills %}
-        {{ m.skill(data.id, data.title) }}
+        {{ m.skill(data.id, data.title, '/api/projects/'+ctx.project.id|string+'/skills/remove/'+data.id|string) }}
       {% endfor %}
       {{ m.icon_button('mdi-content-add', modal='add_skill') }}
       </p>

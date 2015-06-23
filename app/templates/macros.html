@@ -1,5 +1,12 @@
-{% macro skill(id, title) -%}
-    <a href="/skills/{{ id }}" class="btn btn-primary">{{ title }}</a>
+{% macro skill(id, title, remove_url) -%}
+
+    <div class="btn-group">
+        <a href="/skills/{{ id }}" class="btn btn-primary">{{ title }}</a>
+        <a href="bootstrap-elements.html" data-target="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ remove_url }}">Remove</a></li>
+        </ul>
+    </div>
 {%- endmacro %}
 
 {% macro project(id, title, type) -%}

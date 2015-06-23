@@ -69,6 +69,12 @@ def api_new_project_skill(project_id):
     return redirect(url_for('project', id=project_id))
 
 
+@app.route('/api/projects/<int:project_id>/skills/remove/<int:skill_id>')
+def api_remove_project_skill(project_id, skill_id):
+    ProjectsSkills.remove(project_id, skill_id)
+    return redirect(url_for('project', id=project_id))
+
+
 @app.route('/hackers')
 def hackers():
     ctx = {
@@ -103,6 +109,13 @@ def hacker(hacker):
 def api_new_hacker_skill(hacker):
     hacker = Hackers.by_user(hacker)
     Skills.add(hacker_id=hacker.id, *request.form['skills'].split(','))
+    return redirect(url_for('hacker', hacker=hacker.user))
+
+
+@app.route('/api/hackers/<hacker>/skills/remove/<int:skill_id>')
+def api_remove_hacker_skill(hacker, skill_id):
+    hacker = Hackers.by_user(hacker)
+    HackersSkills.remove(hacker.id, skill_id)
     return redirect(url_for('hacker', hacker=hacker.user))
 
 

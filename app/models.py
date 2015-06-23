@@ -115,6 +115,10 @@ class HackersSkills(DatabaseModel):
                 cls.create(hacker=hacker_id, skill=skill_id)
             except peewee.IntegrityError:
                 pass
+            
+    @classmethod
+    def remove(cls, hacker_id, skill_id):
+        return cls.delete().where(cls.hacker == hacker_id, cls.skill == skill_id).execute()
 
 
 class Projects(DatabaseModel):
@@ -226,3 +230,7 @@ class ProjectsSkills(DatabaseModel):
                 cls.create(project=project_id, skill=skill_id)
             except peewee.IntegrityError:
                 pass
+
+    @classmethod
+    def remove(cls, project_id, skill_id):
+        return cls.delete().where(cls.project == project_id, cls.skill == skill_id).execute()
