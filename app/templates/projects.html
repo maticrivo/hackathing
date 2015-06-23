@@ -28,20 +28,20 @@
         <style>
           #project-{{ data.project.id }} .panel,
           #project-{{ data.project.id }} icon{
-            color: #E53935
+            color: {{ data.project.title|colorize }}
           }
           #project-{{ data.project.id }} .panel,
           #project-{{ data.project.id }} hr,
           #project-{{ data.project.id }} tags button {
-            background-color: #E53935;
+            background-color: {{ data.project.title|colorize }};
           }
           #project-{{ data.project.id }} links a:hover {
-            background-color: rgba(229,57,53, 0.2);
+            background-color: rgba({{ data.project.title|colorize|rgb }}, 0.2);
           }
         </style>
         <div class="panel">
           <panel-heading>
-            <icon class="icon mdi-social-poll" style="background-image: url()"></icon>
+            <icon class="icon mdi-social-poll"></icon>
             <div>
               <title>{{ data.project.title }}</title>
             </div>
@@ -55,7 +55,7 @@
           <panel-body>
             {{ data.project.description }}
             <links>
-              <a href="{{ url_for('project', id=data.project.id) }}" target="_blank" class="btn btn-flat">
+              <a href="{{ url_for('project', id=data.project.id) }}" class="btn btn-flat">
                 <i class="mdi-action-home">
                 </i>Project page
               </a>

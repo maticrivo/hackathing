@@ -3,8 +3,8 @@
 {% block body %}
 
 <div class="container">
-  <div id="project" class="panel panel-info">
-    <div class="panel-heading">
+  <div class="panel panel-info">
+    <div class="panel-heading" style="background-color: {{ ctx.project.title|colorize }}">
       <h1>{{ ctx.project.title }}</h1>
       <p>
         {{ ctx.project.description }}
