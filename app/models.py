@@ -75,6 +75,9 @@ class Skills(DatabaseModel):
         ids = []
         for title in titles:
             title = title.strip().lower()
+            if not title:
+                continue
+
             try:
                 data = cls.get(title=title)
             except cls.DoesNotExist:
