@@ -132,6 +132,9 @@ def skill(id):
 
     return render_template('skill.html', ctx=ctx)
 
+@app.route('/agenda')
+def agenda():
+    return render_template('agenda.html', ctx={})
 
 @app.route('/api/digest')
 def digest():
