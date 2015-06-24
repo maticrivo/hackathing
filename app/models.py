@@ -51,7 +51,6 @@ class Hackers(DatabaseModel):
                   .where(HackersSkills.skill == skill_id)
 
 
-
 class Skills(DatabaseModel):
     id = peewee.IntegerField(primary_key=True)
     title = peewee.CharField(unique=True, null=False)
@@ -115,7 +114,7 @@ class HackersSkills(DatabaseModel):
                 cls.create(hacker=hacker_id, skill=skill_id)
             except peewee.IntegrityError:
                 pass
-            
+
     @classmethod
     def remove(cls, hacker_id, skill_id):
         return cls.delete().where(cls.hacker == hacker_id, cls.skill == skill_id).execute()
