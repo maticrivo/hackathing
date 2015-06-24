@@ -16,6 +16,12 @@ DATABASE = load_settings('DATABASE', {
     'password': ''
 })
 
+GOOGLE_LOGIN = load_settings('GOOGLE_LOGIN', {
+  'CLIENT_ID': '',
+  'CLIENT_SECRET': '',
+  'REDIRECT_URI': 'http://127.0.0.1:5000/oauth2callback'
+})
+
 LOG = load_settings('LOG', {
     'level': 'DEBUG'
 })
