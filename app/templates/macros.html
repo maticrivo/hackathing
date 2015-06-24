@@ -1,5 +1,17 @@
-{% macro skill(id, title, remove_url) -%}
+{% macro flash_alert() -%}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for cat, msg in messages %}
+        <div class="alert alert-dismissable alert-{{ cat if cat != 'error' else 'danger' }}">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            {{ msg }}
+        </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+{%- endmacro %}
 
+{% macro skill(id, title, remove_url) -%}
     <div class="btn-group">
         <a href="/skills/{{ id }}" class="btn btn-primary">{{ title }}</a>
         <a href="bootstrap-elements.html" data-target="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>

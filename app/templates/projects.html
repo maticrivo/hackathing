@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% import "macros.html" as m %}
 {% block body %}
 <div class="navbar navbar-material-cyan-700">
   <div class="container">
@@ -21,6 +22,9 @@
 </div>
 
 <div class="container">
+
+  {{ m.flash_alert() }}
+
   <div id="projects">
     {% for data in ctx.projects %}
     <div class="project mix {{ data.skills|map(attribute='title')|map('escape')|list|join(' ') }}"

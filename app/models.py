@@ -177,6 +177,10 @@ class Projects(DatabaseModel):
         project.save()
         return project
 
+    @classmethod
+    def remove(cls, project_id):
+        cls.delete().where(cls.id == project_id).execute()
+
 
 class ProjectsHackers(DatabaseModel):
     hacker = peewee.ForeignKeyField(Hackers)

@@ -1,5 +1,5 @@
 from app import app, settings, email, send_hipchat_msg
-from flask import render_template, url_for, redirect, request
+from flask import render_template, url_for, redirect, request, flash
 from models import *
 from login import requires_login
 
@@ -62,7 +62,6 @@ def api_join(project_id):
     ProjectsHackers.remove(project_id, current_user.id)
     return redirect(url_for('project', id=project_id))
 
-
 @app.route('/api/projects/<int:project_id>/skills/add', methods=['POST'])
 def api_new_project_skill(project_id):
     Skills.add(project_id=project_id, *request.form['skills'].split(','))
@@ -74,9 +73,18 @@ def api_remove_project_skill(project_id, skill_id):
     ProjectsSkills.remove(project_id, skill_id)
     return redirect(url_for('project', id=project_id))
 
-@app.route('/api/projects/<int:project_id>/edit', methods=['POST'])
-def api_edit_project(project_id):
-    return redirect(url_for('project', id=project_id))
+@app.route('/api/projects/<int:project_id>/delete')
+@requires_login
+def api_delete_project(project_id):
+    project = Projects.by_id(project_id)
+    if project.hacker_id == current_user.id:
+        Projects.remove(project_id)
+        flash('Project %s deleted.' % project.title, 'success')
+        return redirect(url_for('projects'))
+    else:
+        flash('Only %s is authorized to delete this project.' % project.hacker.name, 'error')
+        return redirect(url_for('project', id=project_id))
+
 
 @app.route('/hackers')
 def hackers():

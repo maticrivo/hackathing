@@ -56,7 +56,7 @@ h5 + div:empty:after {
   content: 'N/A';
   color: #cccccc;
 }
-a[role="edit"] {
+a[role="delete"] {
   float: right;
-  display: none;
+  color: #ff0000;
 }
