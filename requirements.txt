@@ -4,3 +4,4 @@ Flask-GoogleLogin
 peewee
 MySQL-python
 hypchat
+gunicorn
