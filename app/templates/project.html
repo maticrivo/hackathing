@@ -5,6 +5,9 @@
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading" style="background-color: {{ ctx.project.title|colorize }}">
+      {% if ctx.project.hacker.id == current_user.id %}
+        <a href="{{ url_for('api_edit_project', project_id=ctx.project.id) }}" class="btn btn-default btn-sm" role="edit">edit</a>
+      {% endif %}
       <h1>{{ ctx.project.title }}</h1>
       <p>
         {{ ctx.project.description }}
@@ -20,16 +23,16 @@
       {% endif %}
 
       <h5>Already joined</h5>
-      <p>{% for data in ctx.joined %}
+      <div>{% for data in ctx.joined %}
       {{ m.hacker(data.hacker.user, data.hacker.name) }}
-      {% endfor %}</p>
+      {% endfor %}</div>
 
       <h5>Required skills</h5>
-      <p>{% for data in ctx.skills %}
+      <div>{% for data in ctx.skills %}
         {{ m.skill(data.id, data.title, '/api/projects/'+ctx.project.id|string+'/skills/remove/'+data.id|string) }}
       {% endfor %}
       {{ m.icon_button('mdi-content-add', modal='add_skill') }}
-      </p>
+      </div>
     </div>
   </div>
 

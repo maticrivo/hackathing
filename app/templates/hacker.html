@@ -12,26 +12,26 @@
         <h1>{{ ctx.name }}</h1>
 
         <h5>Skills</h5>
-        <p>{% for data in ctx.skills %}
+        <div>{% for data in ctx.skills %}
           {{ m.skill(data.id, data.title, '/api/hackers/'+ctx.user+'/skills/remove/'+data.id|string) }}
         {% endfor %}
         {{ m.icon_button('mdi-content-add', modal='add_skill') }}
-        </p>
+        </div>
 
         <h5>Pitched</h5>
-        <p>{% for data in ctx.pitched %}
+        <div>{% for data in ctx.pitched %}
           {{ m.project(data.id, data.title, 'pitched') }}
-        {% endfor %}</p>
+        {% endfor %}</div>
 
         <h5>Joined</h5>
-        <p>{% for data in ctx.joined %}
+        <div>{% for data in ctx.joined %}
           {{ m.project(data.id, data.title, 'joined') }}
-        {% endfor %}</p>
+        {% endfor %}</div>
 
         <h5>Can join</h5>
-        <p>{% for data in ctx.suggested %}
+        <div>{% for data in ctx.suggested %}
           {{ m.project(data.id, data.title, 'suggested') }}
-        {% endfor %}</p>
+        {% endfor %}</div>
       </div>
     </div>
   </div>

@@ -9,14 +9,14 @@
     </div>
     <div class="panel-body">
       <h5>Projects requiring {{ ctx.skill.title }}</h5>
-      <p>{% for project in ctx.projects %}
+      <div>{% for project in ctx.projects %}
         {{ m.project(project.id, project.title) }}
-      {% endfor %}</p>
+      {% endfor %}</div>
 
       <h5>Hackers skilled with {{ ctx.skill.title }}</h5>
-      <p>{% for hacker in ctx.skilled %}
+      <div>{% for hacker in ctx.skilled %}
         {{ m.hacker(hacker.user, hacker.name) }}
-      {% endfor %}</p>
+      {% endfor %}</div>
 
     </div>
   </div>

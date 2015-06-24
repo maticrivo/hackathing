@@ -25,6 +25,9 @@ a[role="username"] {
   top: 40px;
   color: rgba(255,255,255,0.5);
 }
+.navbar-right a {
+  margin-right: 30px;
+}
 .navbar-nav .btn {
   padding-top: 10px !important;
   padding-bottom: 10px !important;
@@ -37,10 +40,14 @@ a[role="username"] {
   color: black !important;
 }
 
-h5 + p:not(:last-of-type) {
+h5 + div:not(:last-of-type) {
   margin-bottom: 30px
 }
-h5 + p:empty:after {
+h5 + div:empty:after {
   content: 'N/A';
   color: #cccccc;
+}
+a[role="edit"] {
+  float: right;
+  display: none;
 }

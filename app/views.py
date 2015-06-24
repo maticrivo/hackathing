@@ -74,6 +74,9 @@ def api_remove_project_skill(project_id, skill_id):
     ProjectsSkills.remove(project_id, skill_id)
     return redirect(url_for('project', id=project_id))
 
+@app.route('/api/projects/<int:project_id>/edit', methods=['POST'])
+def api_edit_project(project_id):
+    return redirect(url_for('project', id=project_id))
 
 @app.route('/hackers')
 def hackers():

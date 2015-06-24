@@ -42,11 +42,13 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
               <li>
-              {% if current_user.name %}
-              <a href="{{ url_for('new_project') }}" class="btn btn-default btn-sm">Pitch a project</a>
-              {% else %}
-                <a href="{{ url_for('login') }}">Login</a>
-              {% endif %}
+                <a class="btn btn-default btn-sm"
+                {% if current_user.name %}
+                href="{{ url_for('new_project') }}">Pitch a project
+                {% else %}
+                href="{{ url_for('login') }}">Login
+                {% endif %}
+                </a>
             </li>
           </ul>
         </div>
