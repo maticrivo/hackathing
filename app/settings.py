@@ -16,6 +16,10 @@ DATABASE = load_settings('DATABASE', {
     'password': ''
 })
 
+LOG = load_settings('LOG', {
+    'level': 'DEBUG'
+})
+
 HIPCHAT = load_settings('HIPCHAT', {
     'token': ''
 })

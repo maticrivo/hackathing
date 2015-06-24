@@ -2,7 +2,19 @@ import os, logging
 from flask import Flask
 from flask_googlelogin import GoogleLogin
 
+from app import settings
+
 logger = logging.getLogger(__name__)
+
+def setup_logging():
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter('[%(asctime)s][PID:%(process)d][%(levelname)s][%(name)s] %(message)s')
+    handler.setFormatter(formatter)
+    logging.getLogger().addHandler(handler)
+    logging.getLogger().setLevel(settings.LOG['level'])
+    logging.getLogger("passlib").setLevel("ERROR")
+
+setup_logging()
 
 app = Flask(__name__)
 app.config.update(
