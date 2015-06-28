@@ -18,6 +18,9 @@ var App = function() {
           duration: 400,
           effects: 'fade translateZ(-360px) stagger(34ms)',
           easing: 'ease'
+        },
+        load: {
+          sort: 'random'
         }
       });
   }
