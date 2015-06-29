@@ -31,14 +31,14 @@
 
       <h5>Required skills</h5>
       <div>{% for data in ctx.skills %}
-        {{ m.skill(data.id, data.title, '/api/projects/'+ctx.project.id|string+'/skills/remove/'+data.id|string) }}
+        {{ m.skill(data.id, data.title, url_for('api_remove_project_skill', project_id=ctx.project.id, skill_id=data.id)) }}
       {% endfor %}
       {{ m.icon_button('mdi-content-add', modal='add_skill') }}
       </div>
     </div>
   </div>
 
-    {{ m.add_skill('add_skill', '/api/projects/'+ctx.project.id|string+'/skills/add') }}
+    {{ m.add_skill('add_skill', url_for('api_new_project_skill', project_id=ctx.project.id)) }}
 
   {% include 'disqus.html' %}
 </div>

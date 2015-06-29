@@ -13,7 +13,7 @@
 
         <h5>Skills</h5>
         <div>{% for data in ctx.skills %}
-          {{ m.skill(data.id, data.title, '/api/hackers/'+ctx.user+'/skills/remove/'+data.id|string) }}
+          {{ m.skill(data.id, data.title, url_for('api_remove_hacker_skill', hacker=ctx.user, skill_id=data.id)) }}
         {% endfor %}
         {{ m.icon_button('mdi-content-add', modal='add_skill') }}
         </div>
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  {{ m.add_skill('add_skill', '/api/hackers/'+ctx.user+'/skills/add') }}
+  {{ m.add_skill('add_skill', url_for('api_new_hacker_skill', hacker=ctx.user)) }}
 </div>
 
 <script src="/static/components/bootstrap-material-design/dist/js/material.min.js"></script>
