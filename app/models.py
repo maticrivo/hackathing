@@ -6,7 +6,7 @@ from flask_login import current_user
 
 class DatabaseModel(peewee.Model):
     class Meta:
-        database = db.database
+        database = db
 
 
 class Hackers(DatabaseModel):
