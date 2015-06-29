@@ -87,6 +87,19 @@ def api_delete_project(project_id):
         flash('Only %s is authorized to delete this project.' % project.hacker.name, 'error')
         return redirect(url_for('project', id=project_id))
 
+@app.route('/api/projects/<int:project_id>/edit', methods=['POST'])
+@requires_login
+def api_edit_project(project_id):
+    project = Projects.by_id(project_id)
+    if project.hacker_id == current_user.id:
+        q = Projects.update(title=request.form['title'], description=request.form['description']).where(Projects.id == project_id)
+        q.execute()
+        flash('Project was successfully updated.', 'success')
+    else:
+        flash('Only %s is authorized to delete this project.' % project.hacker.name, 'error')
+
+    return redirect(url_for('project', id=project_id))
+
 
 @app.route('/hackers')
 def hackers():
