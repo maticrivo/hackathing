@@ -162,6 +162,60 @@ def skill(id):
 def agenda():
     return render_template('agenda.html', ctx={})
 
+@app.route('/sessions')
+def sessions():
+    ctx = {
+        'sessions': Sessions.get_all()
+    }
+
+    return render_template('sessions.html', ctx=ctx)
+
+@app.route('/api/sessions/new', methods=['POST'])
+@app.route('/api/sessions/edit', methods=['POST'])
+@requires_login
+def api_edit_session():
+    session_id = request.form['session_id']
+    if session_id:
+        session = Sessions.by_id(int(session_id))
+        if session.hacker_id is current_user.id:
+            Sessions.edit(
+                session_id=session_id,
+                title=request.form['title'],
+                description=request.form['description']
+            )
+    else:
+        Sessions.add(
+            title=request.form['title'],
+            description=request.form['description']
+        )
+
+    return redirect(url_for('sessions'))
+
+@app.route('/api/sessions/<int:session_id>/delete')
+@requires_login
+def api_delete_session(session_id):
+    session = Sessions.by_id(int(session_id))
+    if session.hacker_id is current_user.id:
+        Sessions.remove(session_id)
+        flash('Session %s deleted.' % session.title, 'success')
+    else:
+        flash('Only %s is authorized to delete this session.' % project.hacker.name, 'error')
+
+    return redirect(url_for('sessions'))
+
+@app.route('/api/vote/<int:session_id>')
+@requires_login
+def api_session_vote(session_id):
+    SessionsHackers.vote(session_id)
+    return redirect(url_for('sessions'))
+
+@app.route('/api/unvote/<int:session_id>')
+@requires_login
+def api_session_unvote(session_id):
+    SessionsHackers.unvote(session_id)
+    return redirect(url_for('sessions'))
+
+
 # @app.route('/api/digest')
 # def digest():
 #     items = []

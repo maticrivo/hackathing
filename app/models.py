@@ -240,3 +240,62 @@ class ProjectsSkills(DatabaseModel):
     @classmethod
     def remove(cls, project_id, skill_id):
         return cls.delete().where(cls.project == project_id, cls.skill == skill_id).execute()
+
+
+class Sessions(DatabaseModel):
+    id = peewee.PrimaryKeyField()
+    hackathing_id = peewee.IntegerField()
+    title = peewee.CharField()
+    hacker = peewee.ForeignKeyField(Hackers)
+    description = peewee.TextField()
+
+    @classmethod
+    def by_id(cls, id):
+        return cls.get(cls.id == id)
+
+    @classmethod
+    def get_all(cls):
+        return cls.raw('select s.*, if(sh.id IS NOT NULL, TRUE, FALSE) as voted from sessions s left join sessions_hackers sh on sh.session_id = s.id and sh.hacker_id = 18 group by s.id;')
+        # this doesn't seem to work well :(
+        # return cls.select(cls.id, cls.title, cls.description, Hackers.id, Hackers.name, Hackers.user, (SessionsHackers.id).alias('voted'))\
+        #        .where(cls.hackathing_id == CURRENT_HACKATHING)\
+        #        .join(Hackers, on=(cls.hacker == Hackers.id))\
+        #        .join(SessionsHackers, join_type=peewee.JOIN_LEFT_OUTER, on=(cls.id == SessionsHackers.session) & (SessionsHackers.hacker == current_user.id))\
+        #        .group_by(SessionsHackers.session)
+
+    @classmethod
+    def add(cls, title, description):
+        session = cls.create(
+            hackathing_id=CURRENT_HACKATHING,
+            hacker=current_user.id,
+            title=title,
+            description=description
+        )
+        session.save()
+
+    @classmethod
+    def edit(cls, session_id, title, description):
+        cls.update(title=title, description=description).where(cls.id == session_id).execute()
+
+    @classmethod
+    def remove(cls, session_id):
+        return cls.delete().where(cls.id == session_id).execute()
+
+class SessionsHackers(DatabaseModel):
+    id = peewee.PrimaryKeyField()
+    hacker = peewee.ForeignKeyField(Hackers)
+    session = peewee.ForeignKeyField(Sessions)
+
+    class Meta:
+        db_table = 'sessions_hackers'
+
+    @classmethod
+    def vote(cls, session_id):
+        try:
+            cls.create(session=session_id, hacker=current_user.id)
+        except peewee.IntegrityError:
+            pass
+
+    @classmethod
+    def unvote(cls, session_id):
+        return cls.delete().where(cls.session == session_id, cls.hacker == current_user.id).execute()

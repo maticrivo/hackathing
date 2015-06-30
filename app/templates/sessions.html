@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+{% block body %}
+
+<div class="container">
+  {{ m.flash_alert() }}
+
+  <div id="sessions" class="list-group">
+    {% for session in ctx.sessions %}
+    <div class="list-group-item" {{ 'data-voted' if session.voted }}>
+      <div class="row-picture flip-container">
+        <div class="flipper">
+          <img class="front face" src="http://www.gravatar.com/avatar/{{ (session.hacker.user+'@everything.me')|md5 }}" alt="icon">
+          <a class="mdi-action-favorite back face" role="vote"
+             {% if session.voted %}
+              href="{{ url_for('api_session_unvote', session_id=session.id) }}" data-text="UNVOTE"
+             {% else %}
+              href="{{ url_for('api_session_vote', session_id=session.id) }}"  data-text="VOTE"
+             {% endif %}></a>
+        </div>
+      </div>
+        <div class="row-content" id="session_{{ session.id }}">
+          <h4 class="list-group-item-heading mdi-action-favorite" role="title">
+            {{ session.title }}
+          </h4>
+          <h5><a href="{{ url_for('hacker', hacker=session.hacker.id) }}">{{ session.hacker.name }}</a></h5>
+          <p class="list-group-item-text" role="description">{{ session.description }}</p>
+          {% if session.hacker.id == current_user.id %}
+          <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#edit_session"
+              data-session-id="{{ session.id }}" role="edit_session">edit</a>
+          <a href="{{ url_for('api_delete_session', session_id=session.id) }}" class="btn btn-default btn-sm"
+             role="delete_session">delete</a>
+          {% endif %}
+        </div>
+    </div>
+    <div class="list-group-separator"></div>
+    {% endfor %}
+
+    {% if ctx.sessions|list|length == 0 %}
+      <h3>No Sessions Yet!</h3>
+      <a class="btn btn-primary" data-toggle="modal" data-target="#edit_session">Suggest a session</a>
+    {% endif %}
+  </div>
+  {% include 'disqus.html' %}
+
+  {% call m.modal('Add/Edit Session', 'edit_session', url_for('api_edit_session')) %}
+      <br />
+      <div class="form-group form-control-wrapper">
+        <input type="text" class="form-control" name="title" required />
+        <div class="floating-label">Session Title</div>
+      </div>
+      <div class="form-group form-control-wrapper">
+        <input type="text" class="form-control" name="description" required />
+        <div class="floating-label">Session Description</div>
+      </div>
+      <input type="hidden" name="session_id" />
+  {% endcall %}
+</div>
+
+<script>
+  //triggered when modal is about to be shown
+  $('#edit_session').on('show.bs.modal', function(e) {
+      var session_id, title = '', desc = '';
+
+      session_id = $(e.relatedTarget).data('session-id') || '';
+      if (session_id) {
+        var el = $('#session_'+session_id)
+        title = el.find('[role="title"]').text().trim();
+        desc = el.find('[role="description"]').text().trim();
+      }
+
+      $(e.currentTarget).find('input[name="session_id"]').val(session_id);
+      $(e.currentTarget).find('input[name="title"]').val(title);
+      $(e.currentTarget).find('input[name="description"]').val(desc);
+  });
+</script>
+
+
+{% endblock body %}

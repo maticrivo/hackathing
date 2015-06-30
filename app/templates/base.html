@@ -13,7 +13,7 @@
     <script src="/static/components/jquery/dist/jquery.min.js"></script>
     <script src="/static/components/bootstrap/dist/js/bootstrap.min.js"></script>
   </head>
-  <body>
+  <body data-page="{{ request.endpoint }}">
     <header class="navbar navbar-material-cyan-800">
       <div class="container">
         <h1><a href="{{ url_for('projects') }}"><img src="/static/logo.png" alt="EverythingMe" width="166" /></a></h1>
@@ -39,17 +39,17 @@
           <ul class="nav navbar-nav">
               <li><a href="/projects">Projects</a></li>
               <li><a href="/hackers">Hackers</a></li>
+              <li><a href="/sessions">Sessions (NEW)</a></li>
               <li><a href="/agenda">Agenda</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
               <li>
-                <a class="btn btn-default btn-sm"
                 {% if current_user.name %}
-                href="{{ url_for('new_project') }}">Pitch a project
+                <a class="btn btn-default btn-sm" href="{{ url_for('new_project') }}" role="new_project">Pitch a project</a>
+                <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#edit_session" role="new_session">Suggest a session</a>
                 {% else %}
-                href="{{ url_for('login') }}">Login
+                <a class="btn btn-default btn-sm" href="{{ url_for('login') }}">Login</a>
                 {% endif %}
-                </a>
             </li>
           </ul>
         </div>
