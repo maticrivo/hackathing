@@ -163,6 +163,7 @@ def agenda():
     return render_template('agenda.html', ctx={})
 
 @app.route('/sessions')
+@requires_login
 def sessions():
     ctx = {
         'sessions': Sessions.get_all()
