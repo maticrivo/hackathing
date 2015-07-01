@@ -20,7 +20,8 @@
         </div>
       </div>
         <div class="row-content" id="session_{{ session.id }}">
-          <h4 class="list-group-item-heading mdi-action-favorite" role="title">
+          <voted class="mdi-action-favorite"></voted>
+          <h4 class="list-group-item-heading" role="title">
             {{ session.title }}
           </h4>
           <h5><a href="{{ url_for('hacker', hacker=session.hacker.id) }}">{{ session.hacker.name }}</a></h5>
