@@ -81,22 +81,27 @@ a[role="delete"] {
   text-align: center;
   background: white;
   text-decoration: none !important;
-  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
 }
 .list-group-item:hover .flipper {
-  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg);
+          transform: rotateY(180deg);
  }
 .flipper {
  transition: 0.3s;
- transform-style: preserve-3d;
+ -webkit-transform-style: preserve-3d;
+         transform-style: preserve-3d;
  position: relative;
 }
 .front {
  z-index: 2;
- transform: rotateY(0deg);
+ -webkit-transform: rotateY(0deg);
+         transform: rotateY(0deg);
 }
 .back {
- transform: rotateY(180deg);
+ -webkit-transform: rotateY(180deg);
+         transform: rotateY(180deg);
 }
 
 .row-picture a.face[role="vote"] {
@@ -109,7 +114,8 @@ a[role="vote"]:before {
 }
 [data-voted] a[role="vote"]:before,
 a[role="vote"]:hover:before {
-  transform: scale(6);
+  -webkit-transform: scale(6);
+          transform: scale(6);
   color: red;
 }
 a[role="vote"]:after {
