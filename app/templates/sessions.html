@@ -24,7 +24,7 @@
           <h4 class="list-group-item-heading" role="title">
             {{ session.title }}
           </h4>
-          <h5><a href="{{ url_for('hacker', hacker=session.hacker.id) }}">{{ session.hacker.name }}</a></h5>
+          <h5><a href="{{ url_for('hacker', hacker_user=session.hacker.user) }}">{{ session.hacker.name }}</a></h5>
           <p class="list-group-item-text" role="description">{{ session.description }}</p>
           {% if session.hacker.id == current_user.id %}
           <a class="btn btn-default btn-sm" data-toggle="modal" data-target="#edit_session"

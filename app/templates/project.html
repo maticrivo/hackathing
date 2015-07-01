@@ -15,7 +15,7 @@
       <p>
         {{ ctx.project.description }}
         <br /><br />
-        Pitched by <a href="{{ url_for('hacker', hacker=ctx.project.hacker.user) }}">{{ ctx.project.hacker.name }}</a>
+        Pitched by <a href="{{ url_for('hacker', hacker_user=ctx.project.hacker.user) }}">{{ ctx.project.hacker.name }}</a>
       </p>
     </div>
     <div class="panel-body">

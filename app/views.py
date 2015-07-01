@@ -110,9 +110,9 @@ def hackers():
 
     return render_template('hackers.html', ctx=ctx)
 
-@app.route('/hackers/<hacker>')
-def hacker(hacker):
-    hacker = Hackers.by_user(hacker)
+@app.route('/hackers/<hacker_user>')
+def hacker(hacker_user):
+    hacker = Hackers.by_user(hacker_user)
     skills = HackersSkills.by_hacker(hacker)
     pitched = Projects.by_hacker(hacker)
     joined = [x.project for x in ProjectsHackers.by_hacker(hacker)]
@@ -137,7 +137,7 @@ def hacker(hacker):
 def api_new_hacker_skill(hacker):
     hacker = Hackers.by_user(hacker)
     Skills.add(hacker_id=hacker.id, *request.form['skills'].split(','))
-    return redirect(url_for('hacker', hacker=hacker.user))
+    return redirect(url_for('hacker', hacker_user=hacker.user))
 
 
 @app.route('/api/hackers/<hacker>/skills/remove/<int:skill_id>')
@@ -145,7 +145,7 @@ def api_new_hacker_skill(hacker):
 def api_remove_hacker_skill(hacker, skill_id):
     hacker = Hackers.by_user(hacker)
     HackersSkills.remove(hacker.id, skill_id)
-    return redirect(url_for('hacker', hacker=hacker.user))
+    return redirect(url_for('hacker', hacker_user=hacker.user))
 
 
 @app.route('/skills/<id>')

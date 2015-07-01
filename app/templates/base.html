@@ -19,7 +19,7 @@
         <h1><a href="{{ url_for('projects') }}"><img src="/static/logo.png" alt="EverythingMe" width="166" /></a></h1>
         <div>
           {% if current_user.name %}
-          <a href="{{ url_for('hacker', hacker=current_user.user) }}" role="username">{{ current_user.name }}</a>
+          <a href="{{ url_for('hacker', hacker_user=current_user.user) }}" role="username">{{ current_user.name }}</a>
           {% endif %}
           <h2>HackAthing #7</h2>
           <p>July 7-8th. Showcase July 9th 9:30am.</p>
