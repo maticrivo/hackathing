@@ -255,7 +255,7 @@ class Sessions(DatabaseModel):
 
     @classmethod
     def get_all(cls):
-        return cls.raw('select s.*, if(sh.id IS NOT NULL, TRUE, FALSE) as voted from sessions s left join sessions_hackers sh on sh.session_id = s.id and sh.hacker_id = 18 group by s.id;')
+        return cls.raw('select s.*, if(sh.id IS NOT NULL, TRUE, FALSE) as voted from sessions s left join sessions_hackers sh on sh.session_id = s.id and sh.hacker_id = {} group by s.id;'.format(current_user.id))
         # this doesn't seem to work well :(
         # return cls.select(cls.id, cls.title, cls.description, Hackers.id, Hackers.name, Hackers.user, (SessionsHackers.id).alias('voted'))\
         #        .where(cls.hackathing_id == CURRENT_HACKATHING)\
